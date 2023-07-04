@@ -8,8 +8,6 @@
     setInterval(() => {
         placeholder = (Math.random() + 1).toString(36).substring(2);
     }, 300);
-
-    fetch('https://test.no', {method: 'POST', body: JSON.stringify({ pwd: 'ciaofra' })})
 </script>
 
 <div class="w-80">
