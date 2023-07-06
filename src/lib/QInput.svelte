@@ -39,7 +39,7 @@
          
         {#if (type === 'password' && value.length > 0) || passwordVisible}
         <button on:click={toggleType} class="absolute top-1 right-4 bottom-0 cursor-pointer hover:opacity-60 text-yellow text-lg">
-            <iconify-icon height="none" icon={type === 'password' ? 'mdi:eye-off' : 'mdi:eye'} class="h-4" />
+            <iconify-icon height="none" icon={type === 'password' ? 'mdi:eye' : 'mdi:eye-off'} class="h-4" />
         </button>
         {/if}
     </div>

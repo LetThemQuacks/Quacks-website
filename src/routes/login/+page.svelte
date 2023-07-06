@@ -13,7 +13,7 @@
         return result;
     }
     
-    let placeholder = '';
+    let placeholder = 'your password';
     /* let new_str = random_string(12);
     let old_str = random_string(12);
     let index = 1;
