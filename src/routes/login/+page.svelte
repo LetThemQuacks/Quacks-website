@@ -1,13 +1,32 @@
-<script>
+<script lang="ts">
     import QInput from '$lib/QInput.svelte';
 
     let username = '';
     let password = '';
 
-    let placeholder = (Math.random() + 1).toString(36).substring(2);
+    const random_string = (length: number) => {
+        let result = '';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        for (let i = 0; i < length; i++) {
+          result += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        return result;
+    }
+    
+    let placeholder = '';
+    /* let new_str = random_string(12);
+    let old_str = random_string(12);
+    let index = 1;
+    
     setInterval(() => {
-        placeholder = (Math.random() + 1).toString(36).substring(2);
-    }, 300);
+        placeholder = old_str.slice(index) + new_str.slice(-index).split("").reverse().join("");
+        console.log(placeholder)
+        index += 1;
+        if (index > 12) {
+          index = 1;
+          new_str = random_string(12)
+        }
+    }, 150) */ 
 </script>
 
 <div class="w-80">
@@ -19,6 +38,7 @@
     <QInput
         label="password"
         bind:value={password}
+        type="password"
         {placeholder}
     />
 
