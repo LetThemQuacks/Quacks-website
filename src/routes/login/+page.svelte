@@ -1,8 +1,9 @@
 <script lang="ts">
     import QInput from '$lib/QInput.svelte';
     import type { ActionData } from './$types';
-
+    
     export let form: ActionData;
+    $: console.log(form)
 
     let username = '';
     let password = '';
