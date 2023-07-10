@@ -6,11 +6,11 @@ interface hashedText {
 }
 
 export function hash(text: string, default_salt: string | null = null): hashedText {
-    let result_hash = text;
     const salt = !default_salt ? randomBytes(16).toString('hex') : default_salt;
-    for (let i = 0; i < 3; i++) {
-        result_hash = createHash('sha512').update(result_hash + salt).digest('hex');
-    }
+    
+    let result_hash = text;
+    for (let i = 0; i < 3; i++) result_hash = createHash('sha512').update(result_hash + salt).digest('hex');
+
     return {
         hash: result_hash,
         salt: salt

@@ -17,4 +17,10 @@
         @apply outline-none relative shadow-lg font-semibold text-lg text-center text-dark hover:text-yellow bg-yellow hover:bg-dark
                 border-[3px] border-yellow rounded-lg px-4 py-2.5 sm:py-3 transition-all duration-300
     }
+
+    .noselect, img, button, a {
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
 }

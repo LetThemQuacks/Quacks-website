@@ -1,19 +1,22 @@
 <script lang="ts">
     import QInput from '$lib/QInput.svelte';
-    import type { ActionData } from './$types';
+    // import type { ActionData } from './$types';
     
-    export let form: ActionData;
-    $: console.log(form)
+    // export let form: ActionData;
 
     let username = '';
     let password = '';
-    
-    let placeholder = 'insert password';
 </script>
 
+<svelte:head>
+    <title>Login - Quacks</title>
+</svelte:head>
+
 <div>
-    <h1 class="mb-4 font-bold text-yellow text-4xl sm:text-5xl">QUACKS!</h1>
-    
+    <div class="mb-4 flex flex-row items-center">
+        <h1 class="font-bold text-yellow text-4xl sm:text-5xl">Login!</h1>
+    </div>
+
     <form class="w-80" method="POST">
         <QInput
             label="username"
@@ -24,11 +27,18 @@
             label="password"
             bind:value={password}
             type="password"
-            {placeholder}
+            placeholder="insert password"
         />
     
-
-
         <button class="btn w-full mt-2">Login</button>
+        <h3 class="mt-2 mr-2 text-white font-medium text-right">
+            Don't have a Duck?!
+            <a
+                href="/register"
+                class="font-semibold hover:text-yellow cursor-pointer transition-colors duration-300"
+            >
+                Create One!
+            </a>
+        </h3>
     </form>
 </div>
