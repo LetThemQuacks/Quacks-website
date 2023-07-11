@@ -28,13 +28,9 @@ export const actions: Actions = {
         if (await accounts.findOne({ username: username })) return fail(400, { success: false, msg: 'Username already exists' });
         
         const token = generateToken();
-
         const new_user: NewUserData = {
             username: username,
-            password: {
-                hash: password.hash,
-                salt: password.salt,
-            },
+            password: password,
             token: token,
             skin: 'yellow',
             balance: 0,

@@ -3,7 +3,6 @@
     import type { ActionData } from './$types';
     
     export let form: ActionData;
-    $: console.log(form?.success)
 
     let username = '';
     let password = '';
@@ -31,7 +30,7 @@
             placeholder="insert password"
         />
     
-        <button class="btn w-full mt-2">Register</button>
+        <button class="btn w-full mt-2g group">Register</button>
         <h3 class="mt-2 mr-2 text-white font-medium text-right">
             Already have a Duck?!
             <a

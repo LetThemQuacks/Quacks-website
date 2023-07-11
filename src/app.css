@@ -14,8 +14,9 @@
 
 
     .btn {
-        @apply outline-none relative shadow-lg font-semibold text-lg text-center text-dark hover:text-yellow bg-yellow hover:bg-dark
-                border-[3px] border-yellow rounded-lg px-4 py-2.5 sm:py-3 transition-all duration-300
+        @apply outline-none relative shadow-lg font-semibold text-lg text-center
+                text-dark hover:text-yellow disabled:text-white bg-yellow hover:bg-dark disabled:bg-dark
+                border-[3px] border-yellow disabled:border-white rounded-lg px-4 py-2.5 sm:py-3 transition-all duration-300
     }
 
     .noselect, img, button, a {

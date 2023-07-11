@@ -3,6 +3,7 @@ import { accounts } from "$db/accounts";
 import { hash, compare } from '$db/security/hashing';
 import { fail } from "@sveltejs/kit";
 import type { ObjectId } from "mongodb";
+import { encodeToken } from "$db/security/tokens";
 
 interface UserData {
     username: string;
@@ -21,7 +22,7 @@ export const actions: Actions = {
 		const formData = await request.formData(); 
         const user: UserData | null = await accounts.findOne<UserData>({ username: formData.get('username') });
         
-        if (!user) return fail(404, { msg: 'Messaggio alla famiglia, vostro figlio e\' coglione' })
+        if (!user) return fail(404, { success: false, msg: 'Wrong username or password' })
 
         const pwd_db = user.password.hash;
         const salt = user.password.salt;
@@ -29,15 +30,8 @@ export const actions: Actions = {
         const pwd_input = formData.get('password')!.toString();
         const pwd_hash = hash(pwd_input, salt).hash;
         
-        return {
-            success: compare(pwd_hash, pwd_db),
-            duck: {
-                token: user.token,
-                username: user.username,
-                skin: user.skin,
-                balance: user.balance,
-                id: user._id.toString()
-            }
-        };
+        const success = compare(pwd_hash, pwd_db);
+        if (!success) return fail(404, { success: false, msg: 'Wrong username or password' })
+        return { token: encodeToken(user._id, user.token) }
     }
 };
