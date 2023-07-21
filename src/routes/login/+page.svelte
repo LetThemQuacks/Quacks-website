@@ -1,12 +1,9 @@
 <script lang="ts">
     import QInput from '$lib/QInput.svelte';
     import { enhance } from '$app/forms';
-    // import type { ActionData } from './$types';
-    
-    // export let form: ActionData;
-    
-    let username = '';
-    let password = ''; 
+    import type { ActionData } from './$types';
+        
+    export let form: ActionData;
 </script>
 
 <svelte:head>
@@ -21,12 +18,11 @@
     <form class="w-80" method="POST" use:enhance>
         <QInput
             label="username"
-            bind:value={username}
+            value={form?.username ?? ''}
             placeholder="LorixDev"
         />
         <QInput
             label="password"
-            bind:value={password}
             type="password"
             placeholder="Insert password"
         />

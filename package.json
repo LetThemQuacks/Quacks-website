@@ -12,6 +12,7 @@
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.20.4",
+		"@types/jsonwebtoken": "^9.0.2",
 		"autoprefixer": "^10.4.14",
 		"iconify-icon": "^1.0.8",
 		"mongodb": "^5.7.0",
@@ -26,6 +27,7 @@
 	"type": "module",
 	"dependencies": {
 		"iconify-icon": "^1.0.8",
+		"jsonwebtoken": "^9.0.1",
 		"tree-sitter": "^0.20.5"
 	}
 }
