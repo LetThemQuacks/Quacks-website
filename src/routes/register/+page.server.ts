@@ -1,7 +1,7 @@
 import type { Actions } from "@sveltejs/kit";
 import { fail, redirect } from "@sveltejs/kit";
 import { accounts } from "$lib/db/accounts";
-import { generateToken, encodeToken } from "$lib/security/tokens";
+import { generateToken } from "$lib/security/tokens";
 import { hash } from '$lib/security/hashing';
 
 
@@ -29,7 +29,7 @@ export const actions: Actions = {
             return fail(400, { success: false, msg: 'Username already exists' });
         }
 
-        const token = generateToken();
+        const token = ''; // generateToken();
         const new_user: NewUserData = {
             username: username,
             password: password,
@@ -39,6 +39,6 @@ export const actions: Actions = {
         }
         const { insertedId: id } = await accounts.insertOne(new_user);
 
-        return { success: true, token: encodeToken(id, token) }
+        return { success: true, token: '' }
     }
 };

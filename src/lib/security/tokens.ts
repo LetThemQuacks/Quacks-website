@@ -7,6 +7,8 @@ export function generateToken(_id: ObjectId, username: string): string {
     return jwt.sign({ _id: _id, username: username }, PEPPER_STR, { expiresIn: '30 days' });
 }
 
+
+
 export function decodeToken(encoded_token: string): { id: string, token: string } {
     const splitted_token = encoded_token.split('.');
 
