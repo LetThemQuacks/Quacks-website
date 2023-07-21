@@ -1,9 +1,9 @@
 import type { Actions } from "@sveltejs/kit";
-import { accounts } from "$db/accounts";
-import { hash, compare } from '$db/security/hashing';
+import { accounts } from "$lib/db/accounts";
+import { hash, compare } from '$lib/security/hashing';
+import { encodeToken } from "$lib/security/tokens";
 import { fail } from "@sveltejs/kit";
 import type { ObjectId } from "mongodb";
-import { encodeToken } from "$db/security/tokens";
 
 interface UserData {
     username: string;

@@ -25,6 +25,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"iconify-icon": "^1.0.8"
+		"iconify-icon": "^1.0.8",
+		"tree-sitter": "^0.20.5"
 	}
 }

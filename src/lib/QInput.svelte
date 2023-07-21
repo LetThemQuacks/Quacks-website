@@ -6,9 +6,8 @@
     export let placeholder = '';
     export let type: 'text' | 'password' = 'text'
     export let error = false;
-    
-    let password_visibility = false;
-    
+
+    let password_visibility = false;    
     $: if (value.length <= 0 && password_visibility) type = 'password', password_visibility = false;
 
     const toggleVisibility = () => {
@@ -21,7 +20,7 @@
     {#if label}
     <label
         for="input"
-        class="ml-1 font-semibold text-base transition-colors duration-300"
+        class="ml-1 font-medium text-base transition-colors duration-300"
         class:text-yellow={!error}
         class:text-red={error}
     >
@@ -31,12 +30,11 @@
  
     <div class="relative">
         <input
-            class="w-full h-12 bg-dark border-[3px] outline-none rounded-lg shadow-lg px-3 py-2 font-medium text-white transition-colors duration-300"
-            class:border-yellow={!error}
-            class:border-red={error}
+            class="w-full h-12 bg-dark border-[3px] border-yellow outline-none rounded-lg shadow-lg px-3 py-2 font-base text-lg text-white transition-colors duration-300"
             class:pr-10={type === 'password' || password_visibility}
             
-            autocomplete="off" id="input" name={label}
+            autocomplete="off" required
+            id="input" name={label}
             {...{type}} {placeholder}
         
             bind:value

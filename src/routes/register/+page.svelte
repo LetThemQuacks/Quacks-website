@@ -1,5 +1,6 @@
 <script lang="ts">
     import QInput from '$lib/QInput.svelte';
+    import { enhance } from '$app/forms';
     import type { ActionData } from './$types';
     
     export let form: ActionData;
@@ -13,11 +14,11 @@
 </svelte:head>
 
 <div>
-    <div class="mb-4 flex flex-row items-center">
-        <h1 class="font-bold text-yellow text-4xl sm:text-5xl">Register!</h1>
+    <div class="mb-2 flex flex-row justify-between">
+        <h1 class="font-black text-white text-4xl sm:text-5xl">New <span class="text-yellow">Duck</span>!</h1>
     </div>
 
-    <form class="w-80" method="POST">
+    <form class="w-80" method="POST" use:enhance>
         <QInput
             label="username"
             bind:value={username}
@@ -30,12 +31,12 @@
             placeholder="insert password"
         />
     
-        <button class="btn w-full mt-2g group">Register</button>
-        <h3 class="mt-2 mr-2 text-white font-medium text-right">
-            Already have a Duck?!
+        <button class="btn w-full mt-4 group">Register</button>
+        <h3 class="mt-2 mr-2 text-white font-base text-lg text-right">
+            Already have a Duck?
             <a
                 href="/login"
-                class="font-semibold hover:text-yellow cursor-pointer transition-colors duration-300"
+                class="a-btn"
             >
                 Login!
             </a>

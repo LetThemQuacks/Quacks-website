@@ -1,8 +1,8 @@
 import type { Actions } from "@sveltejs/kit";
-import { accounts } from "$db/accounts";
-import { generateToken, encodeToken } from "$db/security/tokens";
-import { hash } from '$db/security/hashing';
-import { fail } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
+import { accounts } from "$lib/db/accounts";
+import { generateToken, encodeToken } from "$lib/security/tokens";
+import { hash } from '$lib/security/hashing';
 
 
 interface NewUserData {
@@ -25,8 +25,10 @@ export const actions: Actions = {
         const pwd_input = data.password.toString();
         const password = hash(pwd_input); 
     
-        if (await accounts.findOne({ username: username })) return fail(400, { success: false, msg: 'Username already exists' });
-        
+        if (await accounts.findOne({ username: username })) {
+            return fail(400, { success: false, msg: 'Username already exists' });
+        }
+
         const token = generateToken();
         const new_user: NewUserData = {
             username: username,

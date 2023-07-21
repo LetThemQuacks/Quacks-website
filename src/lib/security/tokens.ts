@@ -1,5 +1,5 @@
 import { randomBytes } from 'crypto';
-import { accounts } from '$db/accounts';
+import { accounts } from '$lib/db/accounts';
 import { ObjectId } from 'mongodb';
 
 export function generateToken(): string {

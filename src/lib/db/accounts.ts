@@ -1,3 +1,3 @@
-import db from '$db/mongo';
+import db from '$lib/db/mongo';
 
 export const accounts = db.collection('accounts');

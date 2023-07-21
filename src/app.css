@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 @tailwind base;
@@ -6,7 +7,7 @@
 
 @layer components { 
     * {
-        @apply font-['Poppins']
+        @apply font-["Lexend"]
     }
     ::selection {
         @apply text-white bg-yellow
@@ -14,9 +15,12 @@
 
 
     .btn {
-        @apply outline-none relative shadow-lg font-semibold text-lg text-center
+        @apply outline-none relative shadow-lg font-semibold text-xl text-center
                 text-dark hover:text-yellow disabled:text-white bg-yellow hover:bg-dark disabled:bg-dark
-                border-[3px] border-yellow disabled:border-white rounded-lg px-4 py-2.5 sm:py-3 transition-all duration-300
+                border-[3px] border-yellow disabled:border-white grid place-items-center rounded-lg h-16 transition-all duration-300
+    }
+    .a-btn {
+        @apply font-semibold text-yellow hover:text-white cursor-pointer transition-colors duration-300
     }
 
     .noselect, img, button, a {
