@@ -12,7 +12,7 @@ start_mongo().then(async () => {
 });
 
 export const handle: Handle = async ({ event, resolve }) => {
-    const session_token = event.cookies.get('session') ?? '';
+    const session_token = event.cookies.get('session') ?? 'token not found';
     
     try {
         if (!session_token) event.locals.user = undefined;

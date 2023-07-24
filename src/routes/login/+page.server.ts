@@ -15,8 +15,8 @@ export const actions: Actions = {
         
         if (!user) return fail(404, { success: false, msg: 'Wrong username or password', username: data.username.toString() })
 
-        const pwd_db = user.password.hash;
-        const salt = user.password.salt;
+        const pwd_db = user.password!.hash;
+        const salt = user.password?.salt;
         
         const pwd_input = data.password.toString();
         const pwd_hash = hash(pwd_input, salt).hash;
@@ -29,7 +29,8 @@ export const actions: Actions = {
         cookies.set('session', token, {
             httpOnly: true,
             sameSite: 'strict',
-            maxAge: 60 * 60 * 24 * 30, // 30 days
+            maxAge: 60 * 60 * 24 * 60, // 60 days
+            path: '/'
         });
         
         throw redirect(303, '/')
