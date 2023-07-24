@@ -1,21 +1,10 @@
 import type { Actions } from "@sveltejs/kit";
+import type { UserData } from "$lib/security/tokens";
 import { accounts } from "$lib/db/accounts";
 import { hash, compare } from '$lib/security/hashing';
 import { generateToken } from "$lib/security/tokens";
 import { fail, redirect } from "@sveltejs/kit";
-import type { ObjectId } from "mongodb";
 
-interface UserData {
-    username: string;
-    password: {
-        hash: string;
-        salt: string;
-    }
-    token: string;
-    skin: string;
-    balance: number;
-    _id: ObjectId;
-}
 
 export const actions: Actions = {
 	default: async ({ request, cookies }) => {
@@ -35,9 +24,7 @@ export const actions: Actions = {
         const success = compare(pwd_hash, pwd_db);
         if (!success) return fail(404, { success: false, msg: 'Wrong username or password', username: data.username.toString() })
 
-        console.time('generateToken');
-        const token = generateToken(user._id, user.username);
-        console.timeEnd('generateToken');
+        const token = generateToken(user);
 
         cookies.set('session', token, {
             httpOnly: true,

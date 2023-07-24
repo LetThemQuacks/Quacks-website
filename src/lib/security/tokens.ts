@@ -3,10 +3,22 @@ import { ObjectId } from 'mongodb';
 import jwt from 'jsonwebtoken';
 import { PEPPER_STR } from '$env/static/private';
 
-export function generateToken(_id: ObjectId, username: string): string {
-    return jwt.sign({ _id: _id, username: username }, PEPPER_STR, { expiresIn: '30 days' });
+export interface UserData {
+    username: string;
+    password?: {
+        hash: string;
+        salt: string;
+    }
+    token: string;
+    skin: string;
+    balance: number;
+    _id: ObjectId;
 }
 
+export function generateToken(user: UserData): string {
+    const { password, ...user_without_pwd } = user;
+    return jwt.sign({ user: user_without_pwd }, PEPPER_STR, { expiresIn: '60 days' });
+}
 
 
 export function decodeToken(encoded_token: string): { id: string, token: string } {
