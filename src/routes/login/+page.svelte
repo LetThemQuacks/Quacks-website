@@ -27,9 +27,9 @@
             placeholder="Insert password"
         />
         
-        {#if form?.success === false}
-            <p>
-                { form?.msg }
+        {#if form?.error}
+            <p class="text-red font-medium">
+                { form?.error }
             </p>
         {/if}
 

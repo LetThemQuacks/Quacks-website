@@ -20,9 +20,7 @@ export const actions: Actions = {
         const success = verifyPassword(data.password.toString(), user.password!);
         if (!success) return fail(404, { error: 'Wrong username or password', username: username });
         
-        const { password, ...token_payload } = user;
-        const token = generateToken(token_payload);
-
+        const token = generateToken({ username: user.username, _id: user._id! });
         cookies.set('session', token, { httpOnly: true, sameSite: 'strict', maxAge: 60 * 60 * 24, path: '/' }); 
         
         throw redirect(303, '/')

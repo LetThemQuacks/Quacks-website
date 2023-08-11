@@ -26,10 +26,9 @@ export const actions: Actions = {
             balance: 0,
         }
         
-        await accounts.insertOne(new_user);
+        const { insertedId } = await accounts.insertOne(new_user);
 
-        const { password: pwd, ...token_payload } = new_user;
-        const token = generateToken(token_payload);
+        const token = generateToken({ username: new_user.username, _id: insertedId });
 
         cookies.set('session', token, { httpOnly: true, sameSite: 'strict', maxAge: 60 * 60 * 24, path: '/' }); 
 
