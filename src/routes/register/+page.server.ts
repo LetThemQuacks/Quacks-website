@@ -1,23 +1,13 @@
 import type { Actions } from "@sveltejs/kit";
 import { fail, redirect } from "@sveltejs/kit";
-import { accounts } from "$lib/db/accounts";
+
+import type { UserData } from "$lib/security/tokens";
 import { generateToken } from "$lib/security/tokens";
+import { accounts } from "$lib/db/accounts";
 import { hash } from '$lib/security/hashing';
 
-
-interface NewUserData {
-    username: string;
-    password: {
-        hash: string;
-        salt: string;
-    }
-    token: string;
-    skin: string;
-    balance: number;
-}
-
 export const actions: Actions = {
-	default: async ({ request }) => {
+	default: async ({ request, cookies }) => {
 		const formData = await request.formData();         
         const data = Object.fromEntries(formData.entries());
         
@@ -29,16 +19,20 @@ export const actions: Actions = {
             return fail(400, { success: false, msg: 'Username already exists' });
         }
 
-        const token = ''; // generateToken();
-        const new_user: NewUserData = {
+        let new_user: UserData = {
             username: username,
             password: password,
-            token: token,
             skin: 'yellow',
             balance: 0,
         }
-        const { insertedId: id } = await accounts.insertOne(new_user);
+        
+        await accounts.insertOne(new_user);
 
-        return { success: true, token: '' }
+        const { password: pwd, ...token_payload } = new_user;
+        const token = generateToken(token_payload);
+
+        cookies.set('session', token, { httpOnly: true, sameSite: 'strict', maxAge: 60 * 60 * 24, path: '/' }); 
+
+        throw redirect(303, '/');
     }
 };

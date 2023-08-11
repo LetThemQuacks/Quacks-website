@@ -26,7 +26,13 @@
             type="password"
             placeholder="Insert password"
         />
-    
+        
+        {#if form?.success === false}
+            <p>
+                { form?.msg }
+            </p>
+        {/if}
+
         <button class="btn w-full mt-4">Login</button>
         <h3 class="mt-2 mr-2 text-white text-lg font-base text-right">
             Don't have a Duck?!
