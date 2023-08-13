@@ -7,6 +7,13 @@
         
     export let form: ActionData;
     export let data: PageData;
+    
+    let username = '';
+    let password = '';
+    let error_visibile = true;
+
+    $: username, password, error_visibile = false;
+    $: form?.error, error_visibile = true;
 </script>
 
 <svelte:head>
@@ -21,9 +28,10 @@
     <form class="w-80" method="POST" use:enhance>
         <QInput
             label="username"
-            value={form?.username ?? ''}
             placeholder="LorixDev"
             icon="ph:user-bold"
+
+            bind:value={username}
         />
 
         <QInput
@@ -31,11 +39,12 @@
             type="password"
             placeholder="Insert password"
             icon="mdi:lock"
+            bind:value={password}
         />
         
-        {#if form?.error}
+        {#if form?.error && error_visibile}
             <p class="text-red font-medium">
-                { form?.error }
+                Error: <span class="text-white">{ form?.error }</span>
             </p>
         {/if}
 
