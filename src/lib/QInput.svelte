@@ -8,13 +8,21 @@
     export let error = false;
     export let icon = 'mdi:duck';
 
+    let input: HTMLInputElement;
+
     let password_visibility = false;    
     $: if (value.length <= 0 && password_visibility) type = 'password', password_visibility = false;
 
     const toggleVisibility = () => {
         password_visibility = !password_visibility;
+        input.focus()
         return type === 'text' ? type = 'password' : type = 'text';
     };
+
+    const resetInput = () => {
+        value = '';
+        input.focus();
+    }
 </script>
 
 <div class="w-full flex flex-col mb-2 last:mb-0 relative">
@@ -40,6 +48,7 @@
             class:border-yellow={!error}
             class:border-red={error}
             
+            bind:this={input}
             autocomplete="off" required
             id="input" name={label}
             {...{type}} {placeholder}
@@ -54,7 +63,7 @@
         {/if}
 
         {#if type === 'text' && value.length > 0 && !password_visibility}
-        <button on:click={() => value = ''} type="button" class="a-btn absolute top-0 right-0 bottom-0 text-xl py-3 px-3.5">
+        <button on:click={resetInput} type="button" class="a-btn absolute top-0 right-0 bottom-0 text-xl py-3 px-3.5">
             <iconify-icon icon="heroicons:x-mark-20-solid" class="h-5" />
         </button>
         {/if}
