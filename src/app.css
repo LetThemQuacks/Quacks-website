@@ -16,11 +16,11 @@
 
     .btn {
         @apply outline-none relative shadow-lg font-semibold text-xl text-center
-                text-dark hover:text-yellow disabled:text-white bg-yellow hover:bg-dark disabled:bg-dark
+                text-dark hover:text-yellow focus:text-yellow disabled:text-white bg-yellow hover:bg-dark focus:bg-dark disabled:bg-dark
                 border-[3px] border-yellow disabled:border-white grid place-items-center rounded-lg h-16 transition-all duration-300
     }
     .a-btn {
-        @apply font-semibold text-yellow hover:text-white cursor-pointer transition-colors duration-300
+        @apply font-semibold text-yellow hover:text-white focus:text-white focus:outline-none cursor-pointer transition-colors duration-150
     }
 
     .noselect, img, button, a {

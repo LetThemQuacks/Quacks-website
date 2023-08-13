@@ -2,8 +2,10 @@
     import QInput from '$lib/QInput.svelte';
     import { enhance } from '$app/forms';
     import type { ActionData } from './$types';
+    import type { PageData } from '../$types';
     
     export let form: ActionData;
+    export let data: PageData;
 
     let username = '';
     let password = '';
@@ -33,11 +35,17 @@
             icon="mdi:lock"
         />
     
+        {#if form?.error}
+            <p class="text-red font-medium">
+                { form?.error }
+            </p>
+        {/if}
+
         <button class="btn w-full mt-4 group">Register</button>
         <h3 class="mt-2 mr-2 text-white font-base text-lg text-right">
             Already have a Duck?
             <a
-                href="/login"
+                href={`/login${data?.redirectTo}`}
                 class="a-btn"
             >
                 Login!

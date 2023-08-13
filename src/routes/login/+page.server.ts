@@ -4,10 +4,15 @@ import { fail, redirect } from "@sveltejs/kit";
 import { generateToken } from "$lib/security/tokens";
 import { getUserData, type UserData } from "$lib/db/accounts";
 import { verifyPassword } from "$lib/security/auth";
+import type { PageServerLoad } from "../$types";
 
+export const load: PageServerLoad = async ({ url }) => {
+    const redirectTo = url.searchParams.get('redirect')?.slice(1)
+    return { redirectTo: `?redirect=/${redirectTo ?? ''}` }
+}
 
 export const actions: Actions = {
-	default: async ({ request, cookies }) => {
+	default: async ({ request, cookies, url }) => {
 		const formData = await request.formData(); 
         const data = Object.fromEntries(formData.entries());
         
@@ -21,7 +26,9 @@ export const actions: Actions = {
         
         const { token } = generateToken({ username: user.username, _id: user._id! });
         cookies.set('session', token, { httpOnly: true, sameSite: 'strict', maxAge: 60 * 60 * 24, path: '/' }); 
-        
-        throw redirect(303, '/')
+                
+        const redirectTo = url.searchParams.get('redirect');
+        if (redirectTo) throw redirect(302, `/${redirectTo.slice(1)}`);
+        throw redirect(302, '/')
     }
 };

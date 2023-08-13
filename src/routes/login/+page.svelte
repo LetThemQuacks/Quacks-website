@@ -3,8 +3,10 @@
     import { enhance } from '$app/forms';
     import 'iconify-icon';
     import type { ActionData } from './$types';
+    import type { PageData } from '../$types';
         
     export let form: ActionData;
+    export let data: PageData;
 </script>
 
 <svelte:head>
@@ -41,7 +43,7 @@
         <h3 class="mt-2 mr-2 text-white text-lg font-base text-right">
             Don't have a Duck?!
             <a
-                href="/register"
+                href={`/register${data?.redirectTo}`}
                 class="font-semibold text-yellow hover:text-white cursor-pointer transition-colors duration-300"
             >
                 Create One!
