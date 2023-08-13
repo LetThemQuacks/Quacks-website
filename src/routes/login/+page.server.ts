@@ -1,9 +1,8 @@
 import type { Actions } from "@sveltejs/kit";
 import { fail, redirect } from "@sveltejs/kit";
 
-import type { UserData } from "$lib/security/tokens";
 import { generateToken } from "$lib/security/tokens";
-import { getUserData } from "$lib/db/accounts";
+import { getUserData, type UserData } from "$lib/db/accounts";
 import { verifyPassword } from "$lib/security/auth";
 
 
@@ -20,7 +19,7 @@ export const actions: Actions = {
         const success = verifyPassword(data.password.toString(), user.password!);
         if (!success) return fail(404, { error: 'Wrong username or password', username: username });
         
-        const token = generateToken({ username: user.username, _id: user._id! });
+        const { token } = generateToken({ username: user.username, _id: user._id! });
         cookies.set('session', token, { httpOnly: true, sameSite: 'strict', maxAge: 60 * 60 * 24, path: '/' }); 
         
         throw redirect(303, '/')

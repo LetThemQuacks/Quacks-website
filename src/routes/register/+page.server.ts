@@ -1,9 +1,8 @@
 import type { Actions } from "@sveltejs/kit";
 import { fail, redirect } from "@sveltejs/kit";
 
-import type { UserData } from "$lib/security/tokens";
 import { generateToken } from "$lib/security/tokens";
-import { accounts } from "$lib/db/accounts";
+import { accounts, type UserData } from "$lib/db/accounts";
 import { hash } from '$lib/security/hashing';
 
 export const actions: Actions = {
@@ -24,12 +23,10 @@ export const actions: Actions = {
             password: password,
             skin: 'yellow',
             balance: 0,
-        }
-        
+        } 
         const { insertedId } = await accounts.insertOne(new_user);
-
-        const token = generateToken({ username: new_user.username, _id: insertedId });
-
+        
+        const { token } = generateToken({ username: new_user.username, _id: insertedId });
         cookies.set('session', token, { httpOnly: true, sameSite: 'strict', maxAge: 60 * 60 * 24, path: '/' }); 
 
         throw redirect(303, '/');

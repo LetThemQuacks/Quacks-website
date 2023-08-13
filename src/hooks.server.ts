@@ -1,8 +1,8 @@
 import { error, type Handle } from "@sveltejs/kit";
 import { start_mongo } from "$lib/db/mongo";
-import { PEPPER_STR } from "$env/static/private";
-import jwt from "jsonwebtoken";
 import { getUserData } from "$lib/db/accounts";
+import jwt from "jsonwebtoken";
+import { PEPPER_STR } from "$env/static/private";
 
 start_mongo().then(async () => {
     console.log('[mongodb] Connected!');

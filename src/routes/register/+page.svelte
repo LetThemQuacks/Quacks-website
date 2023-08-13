@@ -23,12 +23,14 @@
             label="username"
             bind:value={username}
             placeholder="LorixDev"
+            icon="ph:user-bold"
         />
         <QInput
             label="password"
             bind:value={password}
             type="password"
             placeholder="insert password"
+            icon="mdi:lock"
         />
     
         <button class="btn w-full mt-4 group">Register</button>

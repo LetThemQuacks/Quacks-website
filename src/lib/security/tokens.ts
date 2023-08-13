@@ -1,24 +1,11 @@
 import jwt from 'jsonwebtoken';
-import { PEPPER_STR } from '$env/static/private';
+import { PEPPER_STR, REFRESH_TOKEN_PEPPER_STR } from '$env/static/private';
 import type { ObjectId } from 'mongodb';
 
-export interface UserData {
-    username: string;
-    password?: {
-        hash: string;
-        salt: string;
-    }
-    skin: string;
-    balance: number;
-    _id?: ObjectId;
-}
+export function generateToken(token_payload: { username: string, _id: ObjectId }) {
+    const token = jwt.sign({ user: token_payload }, PEPPER_STR, { expiresIn: '24h' });
+    const refresh_token = jwt.sign({ user: token_payload }, REFRESH_TOKEN_PEPPER_STR, { expiresIn: '120d' });
 
-export function generateToken(token_payload: { username: string, _id: ObjectId }): string {
-    const token = jwt.sign(
-        { user: token_payload },
-        PEPPER_STR,
-        { expiresIn: '24h' },
-    );
-    return token;
+    return { token, refresh_token };
 }
 

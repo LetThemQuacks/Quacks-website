@@ -1,6 +1,7 @@
 <script lang="ts">
     import QInput from '$lib/QInput.svelte';
     import { enhance } from '$app/forms';
+    import 'iconify-icon';
     import type { ActionData } from './$types';
         
     export let form: ActionData;
@@ -20,11 +21,14 @@
             label="username"
             value={form?.username ?? ''}
             placeholder="LorixDev"
+            icon="ph:user-bold"
         />
+
         <QInput
             label="password"
             type="password"
             placeholder="Insert password"
+            icon="mdi:lock"
         />
         
         {#if form?.error}

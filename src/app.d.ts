@@ -1,6 +1,6 @@
 // See https://kit.svelte.dev/docs/types#app
 
-import type { UserData } from "$lib/security/tokens";
+import type { UserData } from "$lib/db/accounts";
 
 // for information about these interfaces
 declare global {
