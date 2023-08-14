@@ -6,9 +6,11 @@ import { getUserData, type UserData } from "$lib/db/accounts";
 import { verifyPassword } from "$lib/security/auth";
 import type { PageServerLoad } from "../$types";
 
-export const load: PageServerLoad = async ({ url }) => {
-    const redirectTo = url.searchParams.get('redirect')?.slice(1)
-    return { redirectTo: `?redirect=/${redirectTo ?? ''}` }
+export const load: PageServerLoad = async ({ locals, url }) => {
+    const redirectTo = url.searchParams.get('redirect');
+    if (locals.user && redirectTo) throw redirect(302, `/${redirectTo.slice(1)}`);
+
+    if (locals.user) return { username: locals.user.username };
 }
 
 export const actions: Actions = {

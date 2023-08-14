@@ -5,7 +5,8 @@ export default {
         colors: {
             dark: '#191919',
             white: '#efefef',
-            yellow: '#EFB820',
+            yellow: '#efb820',
+            orange: '#eb8134',
             red: '#eb4034',
         },
   },

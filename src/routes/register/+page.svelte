@@ -3,9 +3,10 @@
     import { enhance } from '$app/forms';
     import type { ActionData } from './$types';
     import type { PageData } from '../$types';
+    import { page } from '$app/stores';
     
-    export let form: ActionData;
     export let data: PageData;
+    export let form: ActionData;
 
     let username = '';
     let password = '';
@@ -13,18 +14,31 @@
 
     $: username, password, error_visibile = false;
     $: form?.error, error_visibile = true;
+
+    let redirect: string;
+    $: redirect = $page.url.searchParams.get("redirect") ?? '';
 </script>
 
 <svelte:head>
     <title>Register - Quacks</title>
 </svelte:head>
 
-<div>
+<div class="w-80">
+    {#if data?.username}
+        <p class="text-orange font-medium mb-4">
+            Warning: <span class="text-white">you are already logged in as {data?.username}</span>
+        </p>
+    {:else if redirect}
+        <p class="text-orange font-medium mb-4">
+            Warning: <span class="text-white">you must be logged in before going to {redirect}</span>
+        </p>
+    {/if}
+    
     <div class="mb-2 flex flex-row justify-between">
         <h1 class="font-black text-white text-4xl sm:text-5xl">New <span class="text-yellow">Duck</span>!</h1>
     </div>
 
-    <form class="w-80" method="POST" use:enhance>
+    <form method="POST" use:enhance>
         <QInput
             label="username"
             bind:value={username}
@@ -49,7 +63,7 @@
         <h3 class="mt-2 mr-2 text-white font-base text-lg text-right">
             Already have a Duck?
             <a
-                href={`/login${data?.redirectTo}`}
+                href={`/login${redirect ? `?redirect=${redirect}` : ''}`}
                 class="a-btn"
             >
                 Login!
