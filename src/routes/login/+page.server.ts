@@ -8,7 +8,10 @@ import type { PageServerLoad } from "../$types";
 
 export const load: PageServerLoad = async ({ locals, url }) => {
     const redirectTo = url.searchParams.get('redirect');
-    if (locals.user && redirectTo) throw redirect(302, `/${redirectTo.slice(1)}`);
+    if (redirectTo && locals.user) {
+        if (redirectTo.includes('//') || redirectTo.includes('..')) throw redirect(302, '/');
+        throw redirect(302, `/${redirectTo.slice(1)}`);
+    }
 
     if (locals.user) return { username: locals.user.username };
 }
@@ -30,7 +33,10 @@ export const actions: Actions = {
         cookies.set('session', token, { httpOnly: true, sameSite: 'strict', maxAge: 60 * 60 * 24, path: '/' }); 
                 
         const redirectTo = url.searchParams.get('redirect');
-        if (redirectTo) throw redirect(302, `/${redirectTo.slice(1)}`);
+        if (redirectTo) {
+            if (redirectTo.includes('//') || redirectTo.includes('..')) throw redirect(302, '/');
+            throw redirect(302, `/${redirectTo.slice(1)}`);
+        }
         throw redirect(302, '/')
     }
 };
