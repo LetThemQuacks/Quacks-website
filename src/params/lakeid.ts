@@ -1,3 +1,3 @@
 export function match(value: any) {
-	return /^[0-9A-Z]{6}$/.test(value);
+	return /^[a-zA-Z0-9]{6}$/.test(value);
 }

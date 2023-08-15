@@ -7,6 +7,7 @@
     export let type: 'text' | 'password' = 'text'
     export let error = false;
     export let icon = 'mdi:duck';
+    export let regex: string | null = null;
 
     let input: HTMLInputElement;
 
@@ -43,8 +44,7 @@
         </p>
 
         <input
-            class="w-full h-12 bg-dark border-[3px] outline-none rounded-lg shadow-lg pl-10 px-3 py-2 font-base text-lg text-white transition-colors duration-300"
-            class:pr-10={type === 'password' || password_visibility}
+            class="w-full h-12 bg-dark border-[3px] outline-none rounded-lg shadow-lg px-10 py-2 font-base text-lg text-white transition-colors duration-300"
             class:border-yellow={!error}
             class:border-red={error}
             
@@ -52,6 +52,7 @@
             autocomplete="off" required
             id="input" name={label}
             {...{type}} {placeholder}
+            pattern={regex}
         
             bind:value
         />

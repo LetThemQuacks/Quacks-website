@@ -36,7 +36,7 @@
     {/if}
     
     <div class="mb-2 flex flex-row items-center">
-        <h1 class="font-semibold text-white text-4xl sm:text-5xl">Let's <span class="font-bold text-yellow">Login</span>!</h1>
+        <h1 class="font-extrabold text-white text-4xl sm:text-5xl">Let's <span class="text-yellow">Login</span>!</h1>
     </div>
     
 
@@ -54,6 +54,7 @@
             type="password"
             placeholder="Insert password"
             icon="mdi:lock"
+
             bind:value={password}
         />
         
