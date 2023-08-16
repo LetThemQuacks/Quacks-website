@@ -1,5 +1,6 @@
 <script lang="ts">
     import QInput from '$lib/QInput.svelte';
+    import QAlert from '$lib/QAlert.svelte';
     import { enhance } from '$app/forms';
     import 'iconify-icon';
     import { page } from '$app/stores';
@@ -9,6 +10,7 @@
     export let data: PageData;
     export let form: ActionData;
     
+
     let username = '';
     let password = '';
     let error_visibile = true;
@@ -26,14 +28,14 @@
 
 <div class="w-80">
     {#if data?.username}
-        <p class="text-orange font-medium mb-4">
-            Warning: <span class="text-white">you are already logged in as {data?.username}</span>
-        </p>
+        <QAlert color="orange" icon="ph:warning-fill">You are already logged in as {data?.username}</QAlert>
     {:else if redirect}
-        <p class="text-orange font-medium mb-4">
-            Warning: <span class="text-white">you must be logged in before going to {redirect}</span>
-        </p>
+        <QAlert color="orange" icon="ph:warning-fill">You must be logged in before going to {redirect}</QAlert>
     {/if}
+    
+    {#if form?.error && error_visibile}
+        <QAlert color="red" icon="ph:warning-circle-fill">{form?.error}</QAlert>
+    {/if} 
     
     <div class="mb-2 flex flex-row items-center">
         <h1 class="font-extrabold text-white text-4xl sm:text-5xl">Let's <span class="text-yellow">Login</span>!</h1>
@@ -58,12 +60,6 @@
             bind:value={password}
         />
         
-        {#if form?.error && error_visibile}
-            <p class="text-red font-medium">
-                Error: <span class="text-white">{ form?.error }</span>
-            </p>
-        {/if}
-
         <button class="btn w-full mt-4">Login</button>
         <h3 class="mt-2 mr-2 text-white text-lg font-base text-right">
             Don't have a Duck?!
