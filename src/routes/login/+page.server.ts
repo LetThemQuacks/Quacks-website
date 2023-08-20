@@ -30,7 +30,7 @@ export const actions: Actions = {
         if (!success) return fail(404, { error: 'Wrong username or password', username: username });
         
         const { token } = generateToken({ username: user.username, _id: user._id! });
-        cookies.set('session', token, { httpOnly: true, sameSite: 'strict', maxAge: 60 * 60 * 24, path: '/' }); 
+        cookies.set('session', token, { httpOnly: true, sameSite: 'strict', maxAge: 60 * 60 * 24 * 7, path: '/' }); 
                 
         const redirectTo = url.searchParams.get('redirect');
         if (redirectTo) {

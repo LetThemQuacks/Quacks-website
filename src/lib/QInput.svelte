@@ -8,6 +8,7 @@
     export let error = false;
     export let icon = 'mdi:duck';
     export let regex: string | null = null;
+    export let title: string = '';
 
     let input: HTMLInputElement;
 
@@ -53,6 +54,7 @@
             id="input" name={label}
             {...{type}} {placeholder}
             pattern={regex}
+            {title}
         
             bind:value
         />

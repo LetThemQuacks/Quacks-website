@@ -19,7 +19,7 @@
                 border-[3px] border-yellow disabled:border-white grid place-items-center rounded-lg h-16 transition-all duration-300
     }
     .a-btn {
-        @apply font-semibold text-yellow hover:text-white focus:text-white focus:outline-none cursor-pointer transition-colors duration-150
+        @apply inline-block font-semibold text-yellow hover:text-white focus:text-white focus:outline-none cursor-pointer transition-colors duration-150
     }
 
     .noselect, img, button, a {

@@ -4,7 +4,7 @@ import { fail, redirect } from "@sveltejs/kit";
 
 import { generateToken } from "$lib/security/tokens";
 import { accounts, type UserData } from "$lib/db/accounts";
-import { hash } from '$lib/security/hashing';
+import { hash_password } from '$lib/security/hashing';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
     const redirectTo = url.searchParams.get('redirect');
@@ -23,7 +23,7 @@ export const actions: Actions = {
         
         const username = data.username.toString();
         const pwd_input = data.password.toString();
-        const password = hash(pwd_input); 
+        const password = hash_password(pwd_input); 
     
         if (await accounts.findOne({ username: username })) {
             return fail(400, { error: 'Username already exists' });
@@ -38,7 +38,7 @@ export const actions: Actions = {
         const { insertedId } = await accounts.insertOne(new_user);
         
         const { token } = generateToken({ username: new_user.username, _id: insertedId });
-        cookies.set('session', token, { httpOnly: true, sameSite: 'strict', maxAge: 60 * 60 * 24, path: '/' }); 
+        cookies.set('session', token, { httpOnly: true, sameSite: 'strict', maxAge: 60 * 60 * 24 * 7, path: '/' }); 
 
         const redirectTo = url.searchParams.get('redirect');
         if (redirectTo) {
