@@ -1,4 +1,4 @@
-import { hash, compare } from "./hashing";
+import { hash_password, compare } from "./hashing";
 
 interface PwdObj {
     hash: string;
@@ -10,7 +10,7 @@ export const verifyPassword = (password: string, pwd_db: PwdObj) => {
     const salt = pwd_db.salt;
      
     const pwd_input = password.toString();
-    const pwd_hash = hash(pwd_input, salt).hash;
+    const pwd_hash = hash_password(pwd_input, salt).hash;
      
     return compare(pwd_hash, pwd_hash_db);
 }
