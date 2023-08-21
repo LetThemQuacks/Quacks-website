@@ -1,4 +1,5 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
+import { ObjectId } from 'mongodb';
 import { TOKEN_PEPPER_STR } from '$env/static/private';
 import { calculate_said } from '$lib/security/hashing';
 import { accounts } from '$lib/db/accounts';
@@ -15,7 +16,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
         const token_payload = jwt.verify(token, TOKEN_PEPPER_STR);
         if (!token_payload || typeof token_payload === 'string') return json({ ok: false, msg: 'invalid token' }, { status: 401 });
         
-        const { matchedCount, modifiedCount } = await accounts.updateOne({ _id: token_payload.user._id }, {'$set': { said: said }});
+        const { matchedCount, modifiedCount } = await accounts.updateOne({ _id: new ObjectId(token_payload.user._id) }, {'$set': { said: said }});
         if (!matchedCount) return json({ ok: false, msg: 'user does not exist' }, { status: 401 });
         if (!modifiedCount) return json({ ok: false, msg: 'internal server error' }, { status: 500 });
 
