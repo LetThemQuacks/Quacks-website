@@ -66,7 +66,7 @@
         {/if}
 
         {#if type === 'text' && value.length > 0 && !password_visibility}
-        <button on:click={resetInput} type="button" class="a-btn absolute top-0 right-0 bottom-0 text-xl py-3 px-3.5">
+        <button on:click={resetInput} type="button" tabindex="-1" class="a-btn absolute top-0 right-0 bottom-0 text-xl py-3 px-3.5">
             <iconify-icon icon="heroicons:x-mark-20-solid" class="h-5" />
         </button>
         {/if}
