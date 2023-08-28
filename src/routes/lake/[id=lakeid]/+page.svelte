@@ -3,30 +3,36 @@ import { page } from "$app/stores";
 import { onMount } from "svelte";
 
 import { connectWs, connected } from "$lib/ws/websocket";
-import { generateRsaKeys, importPrivateKey, decryptRsaBase64 } from "$lib/ws/crypto/rsa";
-import { encryptAes, importAesKey } from "$lib/ws/crypto/aes";
+import RSA_Cipher from "$lib/ws/crypto/rsa";
+import AES_Cipher from "$lib/ws/crypto/aes";
 
 
 let lake_id: any;
 $: lake_id = $page.params.id
 
+
 onMount(async () => {
     const { ws, sendPacket } = connectWs();
     
-    const { exported_private_key, exported_public_key } = await generateRsaKeys(2048);
+    const RSA = new RSA_Cipher();
+    const { private_key, public_key } = await RSA.generateKeys(2048);
     
     connected.subscribe((is_connected) => {
-        if (is_connected) sendPacket({ type: 'client_rsa', data: { rsa_key: exported_public_key, length: 2048 }});
+        if (is_connected) sendPacket({ type: 'client_rsa', data: { rsa_key: public_key, length: 2048 }});
     });
    
    ws.onmessage = async (message: MessageEvent) => {
         const data = JSON.parse(message.data).data;
         if (data.aes_key) {
-            const private_key = await importPrivateKey(exported_private_key);
-            const aes_key_bytes = await decryptRsaBase64(data.aes_key, private_key)
-            const aes_key = await importAesKey(aes_key_bytes);
+            await RSA.importKey(private_key);
+            const aes_key = await RSA.decrypt(data.aes_key);
+
+            const AES = new AES_Cipher();
+            await AES.importKey(aes_key);
             
-            console.log(await encryptAes('test', aes_key));
+            const aes_encrypt = await AES.encrypt('test');
+            const aes_decrypt = await AES.decrypt(aes_encrypt);
+            console.log(aes_decrypt)
         }
     }
 });
