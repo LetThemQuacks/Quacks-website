@@ -14,7 +14,7 @@ $: username = data?.username;
 {#if logged}
     <div>
         <h3 class="font-bold text-4xl text-white text-center">Hi, <span class="text-yellow">{username}</span></h3>
-        <a href="/join" class="btn w-72 mt-8">Let's Swim</a>
+        <a href="/swim" class="btn w-72 mt-8">Let's Swim</a>
         <a href="/logout" class="mt-4 a-btn w-full text-center text-lg font-bold text-white hover:text-red focus:text-red">Logout</a>
     </div>
 {:else}

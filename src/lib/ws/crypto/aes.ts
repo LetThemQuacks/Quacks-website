@@ -3,10 +3,10 @@ import { arrayBufferToBase64, base64ToArrayBuffer, arrayBufferToString, stringTo
 class AES_Cipher {
     key: CryptoKey | null = null;
     
-    async importKey(aes_key_bytes: ArrayBuffer) {
+    async importKey(key_bytes: ArrayBuffer) {
         this.key = await crypto.subtle.importKey(
                 'raw',
-                aes_key_bytes,
+                key_bytes,
                 { name: "AES-CBC" },
                 false,
                 ["encrypt", "decrypt"],
