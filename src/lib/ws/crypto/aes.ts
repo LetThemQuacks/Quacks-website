@@ -32,10 +32,11 @@ class AES_Cipher {
         if (!this.key) throw Error('AES key has not been imported correctly.');
 
         const encrypted_buffer = base64ToArrayBuffer(encrypted_b64_str);
-    
+
         const iv = encrypted_buffer.slice(0, 16);
-        const buffer_to_decrypt = encrypted_buffer.slice(16, 32);
+        const buffer_to_decrypt = encrypted_buffer.slice(16, encrypted_buffer.length);
         
+
         const decrypted_buffer = await window.crypto.subtle.decrypt(
             {
                 name: "AES-CBC",

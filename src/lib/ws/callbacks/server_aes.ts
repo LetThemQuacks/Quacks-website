@@ -32,6 +32,8 @@ const server_aes = async (data: Server_AES_Packet) => {
             said: said_data.said,
         }
     })
+
+    client.sendPacketsInQueue();
 }
 
 export default server_aes;
