@@ -17,6 +17,11 @@ interface Packet {
     },
 };
 
+interface PacketWithError {
+    packet: Packet,
+    error_handler: CallableFunction | undefined,
+}
+
 class WS_Client {
     static instance: WS_Client;
 
@@ -24,7 +29,7 @@ class WS_Client {
     AES_instance: AES_Cipher | null = null;
     RSA_instance: RSA_Cipher | null = null;
     error_handlers: Error_Handlers = {};
-    packets_queue: Array<{packet: Packet, error_handler: CallableFunction | undefined}> = [];
+    packets_queue: PacketWithError[] = [];
 
     constructor(ip: string, force: boolean = false) {
         if (WS_Client.instance && !force) throw Error('A WS_Client instance already exist.');
@@ -43,7 +48,6 @@ class WS_Client {
     private connectWsFunctions() {
         this.ws.onopen = this.onConnect;
         this.ws.onmessage = this.onMessage;
-        this.ws.onerror = this.onError;
         this.ws.onclose = this.onClose;
     }
 
@@ -98,17 +102,14 @@ class WS_Client {
 
     async onMessage(message: MessageEvent<string>) {
         if (message.data === '{"type": "ping"}') return WS_Client.instance.sendPacket({ type: 'pong', data: {} });
-        const data_obj = await WS_Client.instance!.loadPacket(message.data);
-        
+        const data_obj = await WS_Client.instance!.loadPacket(message.data);        
+
         const callback_obj = CallbacksManager.callbacks_dict[data_obj.type];
+        if (!callback_obj) return console.warn(`Callback not handled "${data_obj.type}"`)
         callback_obj.callback(data_obj.data);
-    }
-    
-    onError() {
     }
 
     onClose() {
-        console.log('ws closed')
     }
 }
 

@@ -1,11 +1,19 @@
 <script lang="ts">
-import QInput from "$lib/QInput.svelte";
-import QAlert from "$lib/QAlert.svelte";
 import { enhance } from "$app/forms";
 import { page } from "$app/stores";
+import { onMount } from "svelte";
+
+import WS_Client from "$lib/ws/websocket";
+import QInput from "$lib/QInput.svelte";
+import QAlert from "$lib/QAlert.svelte";
 
 $: warning = $page.url.searchParams.get('warn') ?? '';
 $: error = $page.url.searchParams.get('err') ?? '';
+
+
+onMount(() => {
+    if (!WS_Client.instance) new WS_Client('ws://localhost:5000/room');
+})
 
 </script>
 
@@ -38,6 +46,6 @@ $: error = $page.url.searchParams.get('err') ?? '';
             title="Lake ID of 6 characters"
         />
 
-        <button class="btn w-full mt-4">Join</button>
+        <button class="btn w-full mt-4">Swim</button>
     </form>
 </div>
