@@ -36,7 +36,7 @@
     {/if} 
     
     <div class="mb-2 flex flex-row justify-between">
-        <h1 class="font-extrabold text-white text-4xl sm:text-5xl">New <span class="text-yellow">Duck</span>!</h1>
+        <h1 class="font-extrabold text-white text-5xl">New <span class="text-yellow">Duck</span>!</h1>
     </div>
 
     <form method="POST" use:enhance>

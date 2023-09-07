@@ -38,7 +38,7 @@
     {/if} 
     
     <div class="mb-2 flex flex-row items-center">
-        <h1 class="font-extrabold text-white text-4xl sm:text-5xl">Let's <span class="text-yellow">Login</span>!</h1>
+        <h1 class="font-extrabold text-white text-5xl">Let's <span class="text-yellow">Login</span>!</h1>
     </div>
     
 
