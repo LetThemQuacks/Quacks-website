@@ -7,7 +7,7 @@ import 'iconify-icon';
 import WS_Client from "$lib/ws/websocket";
 import QInput from "$lib/QInput.svelte";
 import QAlert from "$lib/QAlert.svelte";
-import { connection_state, connecting_ip } from "./connection";
+import { connection_state, connection_ip } from "./connection";
 
 $: warning = $page.url.searchParams.get('warn') ?? '';
 $: error = $page.url.searchParams.get('err') ?? '';
@@ -18,7 +18,7 @@ let options_visible = false;
 let id: string;
 let new_ws_ip: string;
 
-const gotoLake = (id: string) => goto(`/lake/${id.toUpperCase()}${WS_Client.instance.ip ? `?ip=${WS_Client.instance.ip}` : ''}`);
+const gotoLake = (id: string) => goto(`/lake/${id.toUpperCase()}${WS_Client.instance.ip !== WS_Client.default_ip ? `?ip=${WS_Client.instance.ip}` : ''}`);
 
 const changeWsIp = (ip: string) => {
     // if (ip === WS_Client.instance.ip) return error = `You are already connected to ${ip}`;
@@ -91,12 +91,12 @@ onMount(() => {
                         not_required
                     />
                 </div>
-                <button class="btn aspect-square h-12">
+                <button class="btn aspect-square h-12" disabled={$connection_state === 'Connecting'}>
                     <iconify-icon icon="material-symbols:fitbit-check-small-rounded" class="text-4xl" />
                 </button>
             </form>
-            {#if connecting_ip}
-                <p class="text-white font-semibold mt-2">{ $connection_state } to { $connecting_ip }</p>
+            {#if connection_ip}
+                <p class="text-white font-semibold mt-2">{ $connection_state } to { $connection_ip }</p>
             {/if}
         {/if}
     </div>

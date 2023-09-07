@@ -6,7 +6,7 @@ import ping from "./callbacks/ping"
 import server_aes from "./callbacks/server_aes";
 import error from "./callbacks/error";
 import join_room from "./callbacks/join_confirm";
-import { connection_state, connecting_ip } from "../../routes/swim/connection";
+import { connection_state, connection_ip } from "../../routes/swim/connection";
 
 
 type Error_Handlers = {
@@ -45,11 +45,11 @@ class WS_Client {
     }
     
     connect(ip: string) {
-        connection_state.set('Connecting');
-        connecting_ip.set(ip !== '' ? ip : 'Quacks GameServer');
-
         this.ip = ip !== '' ? ip : WS_Client.default_ip;
-        
+         
+        connection_state.set('Connecting');
+        connection_ip.set(this.ip !== WS_Client.default_ip ? this.ip : 'Quacks GameServer');
+
         this.ws = new WebSocket(`ws://${this.ip}/room`);
         this.connectWsFunctions();
         return this.ws;

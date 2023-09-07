@@ -11,6 +11,9 @@ export let icon: string;
     class="relative flex flex-row items-center p-2 border-[3px] rounded-lg mb-4 shadow-lg"
     class:border-red={color === 'red'}
     class:border-orange={color === 'orange'}
+
+    class:selection:bg-red={color === 'red'}
+    class:selection:bg-orange={color === 'orange'}
 >
     <iconify-icon icon={icon} class="absolute text-xl ml-1"
         class:text-red={color === 'red'}
