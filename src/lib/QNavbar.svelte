@@ -1,12 +1,13 @@
 <script lang="ts">
 import { page } from "$app/stores";
 
-let current_page: 'home' | 'swim' | 'duck';
+let current_page: 'home' | 'swim' | 'duck' | '';
 
 $: {
     if ($page.url.pathname === '/') current_page = 'home';
-    if ($page.url.pathname === '/swim') current_page = 'swim';
-    if ($page.url.pathname === '/duck') current_page = 'duck';
+    else if ($page.url.pathname === '/swim') current_page = 'swim';
+    else if ($page.url.pathname === '/duck') current_page = 'duck';
+    else current_page = '';
 }
 </script>
 

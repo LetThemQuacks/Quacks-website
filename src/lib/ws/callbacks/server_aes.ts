@@ -1,6 +1,7 @@
 import WS_Client from "../websocket";
 import AES_Cipher from "../crypto/aes";
 import { arrayBufferToBase64 } from "../crypto/arraybuffers";
+import { connection_state } from "../../../routes/swim/connection";
 
 interface Server_AES_Packet {
     aes_key: string;
@@ -32,7 +33,8 @@ const server_aes = async (data: Server_AES_Packet) => {
             said: said_data.said,
         }
     })
-
+    
+    connection_state.set('Connected');
     client.sendPacketsInQueue();
 }
 

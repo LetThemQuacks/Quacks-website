@@ -6,6 +6,8 @@ import ping from "./callbacks/ping"
 import server_aes from "./callbacks/server_aes";
 import error from "./callbacks/error";
 import join_room from "./callbacks/join_confirm";
+import { connection_state, connecting_ip } from "../../routes/swim/connection";
+
 
 type Error_Handlers = {
     [from_packet_type: string]: CallableFunction,
@@ -24,23 +26,31 @@ interface PacketWithError {
 
 class WS_Client {
     static instance: WS_Client;
+    static default_ip = 'localhost:5000';
 
     ws: WebSocket;
+    ip: string;
     AES_instance: AES_Cipher | null = null;
     RSA_instance: RSA_Cipher | null = null;
     error_handlers: Error_Handlers = {};
     packets_queue: PacketWithError[] = [];
 
-    constructor(ip: string, force: boolean = false) {
+    constructor(ip: string = WS_Client.default_ip, force: boolean = false) {
         if (WS_Client.instance && !force) throw Error('A WS_Client instance already exist.');
         WS_Client.instance = this;
-        
+
+        this.ip = ip;
         this.registerCallbacks();
         this.ws = this.connect(ip); 
     }
     
     connect(ip: string) {
-        this.ws = new WebSocket(ip);
+        connection_state.set('Connecting');
+        connecting_ip.set(ip !== '' ? ip : 'Quacks GameServer');
+
+        this.ip = ip !== '' ? ip : WS_Client.default_ip;
+        
+        this.ws = new WebSocket(`ws://${this.ip}/room`);
         this.connectWsFunctions();
         return this.ws;
     }
@@ -48,6 +58,7 @@ class WS_Client {
     private connectWsFunctions() {
         this.ws.onopen = this.onConnect;
         this.ws.onmessage = this.onMessage;
+        this.ws.onerror = this.onError;
         this.ws.onclose = this.onClose;
     }
 
@@ -107,6 +118,11 @@ class WS_Client {
         const callback_obj = CallbacksManager.callbacks_dict[data_obj.type];
         if (!callback_obj) return console.warn(`Callback not handled "${data_obj.type}"`)
         callback_obj.callback(data_obj.data);
+    }
+
+    onError() {
+        connection_state.set('Failed to connect');
+        // new WS_Client(WS_Client.default_ip, true);
     }
 
     onClose() {

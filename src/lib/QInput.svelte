@@ -5,10 +5,10 @@
     export let value = '';
     export let placeholder = '';
     export let type: 'text' | 'password' = 'text'
-    export let error = false;
     export let icon = 'mdi:duck';
     export let regex: string | null = null;
     export let title: string = '';
+    export let not_required: boolean = false;
 
     let input: HTMLInputElement;
 
@@ -31,26 +31,22 @@
     {#if label}
     <label
         for="input"
-        class="ml-1 font-medium text-base transition-colors duration-300"
-        class:text-yellow={!error}
-        class:text-red={error}
+        class="ml-1 font-medium text-base text-yellow transition-colors duration-300"
     >
         { label }
     </label>
     {/if}
  
     <div class="relative"> 
-        <p class="cursor-base absolute top-0 left-0 bottom-0 text-xl py-3 px-3.5" class:text-yellow={!error} class:text-red={error}>
+        <p class="text-yellow cursor-base absolute top-0 left-0 bottom-0 text-xl py-3 px-3.5">
             <iconify-icon icon={icon} class="h-5" />
         </p>
 
         <input
-            class="w-full h-12 bg-dark border-[3px] outline-none rounded-lg shadow-lg px-10 py-2 font-base text-lg text-white transition-colors duration-300"
-            class:border-yellow={!error}
-            class:border-red={error}
+            class="w-full h-12 bg-dark border-[3px] border-yellow outline-none rounded-lg shadow-lg px-10 py-2 font-base text-lg text-white transition-colors duration-300"
             
             bind:this={input}
-            autocomplete="off" required
+            autocomplete="off" required={!not_required}
             id="input" name={label}
             {...{type}} {placeholder}
             pattern={regex}

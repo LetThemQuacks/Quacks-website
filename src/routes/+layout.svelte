@@ -5,7 +5,7 @@
 </script>
 
 <div class="relative w-full h-screen flex items-center justify-center bg-dark">
-    {#if !$page.url.pathname.includes('/login') && !$page.url.pathname.includes('/register')}
+    {#if $page.url.pathname !== '/login' && $page.url.pathname !== '/register'}
         <QNavbar />
     {/if}
     <slot />

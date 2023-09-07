@@ -1,17 +1,20 @@
 <script lang="ts">
 import { page } from "$app/stores";   
-import { onMount } from "svelte";
+import { onDestroy, onMount } from "svelte";
 import { goto } from "$app/navigation";
 
 import WS_Client from "$lib/ws/websocket";
 import { add, messages, reset } from "./globals/chat";
+    import { connection_state } from "../../swim/connection";
 
 let lake_id: any;
 $: lake_id = $page.params.id
+$: ip = $page.url.searchParams.get('ip') ?? '';
+$: if ($connection_state === 'Failed to connect') goto(`/swim?ip=${ip}`);
 
 onMount(async () => {
-    if (!WS_Client.instance) new WS_Client('ws://localhost:5000/room');
-    if (WS_Client.instance.ws.readyState === WebSocket.CLOSED) new WS_Client('ws://localhost:5000/room', true);
+    if (!WS_Client.instance) new WS_Client(ip ?? '');
+    if (WS_Client.instance.ws.readyState === WebSocket.CLOSED) new WS_Client(ip ?? '', true);
     
     WS_Client.instance.sendPacket({
         type: 'join_room',
@@ -24,6 +27,8 @@ onMount(async () => {
 
     add('reaching the lake...');
 });
+
+onDestroy(() => reset());
 
 </script>
 
