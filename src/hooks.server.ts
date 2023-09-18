@@ -21,10 +21,10 @@ export const handle: Handle = async ({ event, resolve }) => {
         const token_payload = jwt.verify(token, TOKEN_PEPPER_STR);
         if (!token_payload || typeof token_payload === 'string') throw error(500, { message: 'something went wrong (jwt internal error)' });
     
-        const user = await getUserData(token_payload.user.username);
-        if (!user) throw error(404, { message: 'session not found' });
+        const user_data = await getUserData(token_payload.user.username);
+        if (!user_data) throw error(404, { message: 'session not found' });
 
-        const { password, ...user_without_password } = user;
+        const { password, ...user_without_password } = user_data;
         event.locals.user = user_without_password;
     } catch (e: any) {
         if (e.toString().includes('jwt expired')) event.cookies.set('session', '', { maxAge: 0 });

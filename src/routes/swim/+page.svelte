@@ -7,11 +7,12 @@ import 'iconify-icon';
 import WS_Client from "$lib/ws/websocket";
 import QInput from "$lib/QInput.svelte";
 import QAlert from "$lib/QAlert.svelte";
-import { connection_state, connection_ip } from "./connection";
+import { connection_state, connection_ip, status_bar } from "./connection";
 
 $: warning = $page.url.searchParams.get('warn') ?? '';
 $: error = $page.url.searchParams.get('err') ?? '';
 $: ip_param = $page.url.searchParams.get('ip') ?? '';
+$: $connection_state, $connection_ip, status_bar.set(`${$connection_state} to ${$connection_ip}`)
 
 let options_visible = false;
 
@@ -20,22 +21,27 @@ let new_ws_ip: string;
 
 const gotoLake = (id: string) => goto(`/lake/${id.toUpperCase()}${WS_Client.instance.ip !== WS_Client.default_ip ? `?ip=${WS_Client.instance.ip}` : ''}`);
 
-const changeWsIp = (ip: string) => {
-    // if (ip === WS_Client.instance.ip) return error = `You are already connected to ${ip}`;
-    new WS_Client(ip, true);
+const changeWsIp = (ip_to_change: string) => {
+    if (WS_Client.processIP(ip_to_change) === WS_Client.processIP(WS_Client.instance.ip)) {
+        if ($connection_state === 'Connected') {
+            return status_bar.set(`You are already connected to ${$connection_ip}`);
+        }
+    }
+
+    new WS_Client(ip_to_change, true);
     
-    if (!ip) return goto('/swim');
-    else if (ip !== WS_Client.default_ip) return goto(`/swim?ip=${ip}`);
+    if (!ip_to_change) return goto('/swim');
+    else if (ip_to_change !== WS_Client.default_ip) return goto(`/swim?ip=${ip_to_change}`);
 }
 
 onMount(() => {
     if (!WS_Client.instance) new WS_Client(ip_param);
-    else if (WS_Client.instance.ip !== WS_Client.default_ip && WS_Client.instance.ip !== ip_param) new WS_Client(ip_param, true);
+    else if (WS_Client.instance.ip !== WS_Client.default_ip) {
+        if (WS_Client.instance.ip !== ip_param) new WS_Client(ip_param, true);
+        options_visible = true;
+    }
     
-    if (WS_Client.instance.ip !== WS_Client.default_ip) options_visible = true;
-
-    if (ip_param === '') new_ws_ip = '';
-    else if (ip_param !== WS_Client.default_ip) new_ws_ip = WS_Client.instance.ip;
+    new_ws_ip = ip_param;
 })
 
 </script>
@@ -91,12 +97,16 @@ onMount(() => {
                         not_required
                     />
                 </div>
-                <button class="btn aspect-square h-12" disabled={$connection_state === 'Connecting'}>
+                <button class="btn aspect-square h-12 disabled:cursor-progress" disabled={$connection_state === 'Connecting'}>
                     <iconify-icon icon="material-symbols:fitbit-check-small-rounded" class="text-4xl" />
                 </button>
             </form>
             {#if connection_ip}
-                <p class="text-white font-semibold mt-2">{ $connection_state } to { $connection_ip }</p>
+                <p class="font-semibold mt-2"
+                    class:text-green={$status_bar.includes('Connected')}
+                    class:text-white={$status_bar.includes('Connecting') || $status_bar.includes('You are already connected to')}
+                    class:text-red={$status_bar.includes('Failed to connect')}
+                >{ $status_bar }</p>
             {/if}
         {/if}
     </div>

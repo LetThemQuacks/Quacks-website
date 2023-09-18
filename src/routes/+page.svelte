@@ -1,10 +1,17 @@
 <script lang="ts">
 import type { PageData } from "./$types";
+import { onMount } from "svelte";
+import { goto } from "$app/navigation";
 
 export let data: PageData;
 
 $: logged = data?.logged;
 $: username = data?.username;
+
+onMount(() => {
+    if (username === 'Giulio') goto('//we-are-jammin.xyz');
+})
+
 </script>
 
 <svelte:head>

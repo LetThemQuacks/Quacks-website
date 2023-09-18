@@ -2,11 +2,14 @@ import type AES_Cipher from "./crypto/aes";
 import RSA_Cipher from "./crypto/rsa";
 import CallbacksManager from "./callbacks_manager";
 
+import { connection_state, connection_ip } from "../../routes/swim/connection";
+
 import ping from "./callbacks/ping"
 import server_aes from "./callbacks/server_aes";
 import error from "./callbacks/error";
 import join_room from "./callbacks/join_confirm";
-import { connection_state, connection_ip } from "../../routes/swim/connection";
+import on_message from "./callbacks/on_message";
+import message_confirm from "./callbacks/message_confirm";
 
 
 type Error_Handlers = {
@@ -48,7 +51,7 @@ class WS_Client {
         this.ip = ip !== '' ? ip : WS_Client.default_ip;
          
         connection_state.set('Connecting');
-        connection_ip.set(this.ip !== WS_Client.default_ip ? this.ip : 'Quacks GameServer');
+        connection_ip.set(WS_Client.processIP(this.ip));
 
         this.ws = new WebSocket(`ws://${this.ip}/room`);
         this.connectWsFunctions();
@@ -73,6 +76,14 @@ class WS_Client {
         CallbacksManager.registerCallback('error', error);
         CallbacksManager.registerCallback('server_aes', server_aes);
         CallbacksManager.registerCallback('join_confirm', join_room);
+        CallbacksManager.registerCallback('message', on_message);
+        CallbacksManager.registerCallback('message_confirm', message_confirm);
+    }
+
+
+    static processIP = (ip: string) => {
+        if (ip === WS_Client.default_ip || ip === '') return 'Quacks Server';
+        return ip;
     }
 
     async dumpPacket(data: Packet) {
@@ -83,6 +94,7 @@ class WS_Client {
 
     async loadPacket(data: string) {
         if (this.AES_instance) data = await this.AES_instance.decrypt(data);
+        console.log(data)
         return JSON.parse(data);
     }
 

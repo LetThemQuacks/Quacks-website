@@ -27,7 +27,7 @@ $: {
             class="a-btn w-[1fr] sm:w-40 text-center text-white hover:text-yellow focus:text-yellow"
             class:pointer-events-none={current_page === 'swim'}
             class:text-yellow={current_page === 'swim'}
-            href={`/swim${$connection_ip !== undefined && $connection_ip !== 'Quacks GameServer' ? `?ip=${$connection_ip}` : ''}`}
+            href={`/swim${$connection_ip !== undefined && $connection_ip !== 'Quacks Server' ? `?ip=${$connection_ip}` : ''}`}
         >Swim</a>
     
         <div class="border-[2px] h-6 sm:h-10 border-left border-yellow rounded-sm" />

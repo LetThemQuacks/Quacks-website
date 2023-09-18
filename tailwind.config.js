@@ -8,6 +8,7 @@ export default {
             yellow: '#efb820',
             orange: '#eb8134',
             red: '#eb4034',
+            green: '#4fad2d',
         },
   },
   plugins: [],
