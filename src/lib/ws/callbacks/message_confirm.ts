@@ -3,7 +3,6 @@ import { removePendingMessage, addMessage, getMessageFromPendingMessages } from 
 
 const message_confirm = async (data: { res_id: string }) => {
     const message = getMessageFromPendingMessages(data.res_id);
-    setTimeout(() => {
     removePendingMessage(data.res_id);
 
     if (!message) return goto("/swim?warn=Unexpected Error");
@@ -15,7 +14,7 @@ const message_confirm = async (data: { res_id: string }) => {
             id: '',
         },
     });
-    }, 1000)
 };
 
 export default message_confirm;
+
