@@ -1,7 +1,7 @@
 import WS_Client from "../websocket";
 import AES_Cipher from "../crypto/aes";
 import { arrayBufferToBase64 } from "../crypto/arraybuffers";
-import { connection_state } from "../../../routes/swim/connection";
+import { connection_state } from "$lib/stores/connection";
 
 interface Server_AES_Packet {
     aes_key: string;

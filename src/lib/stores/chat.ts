@@ -10,9 +10,12 @@ export interface MessageData {
 }
 
 export let messages = writable<MessageData[]>([]);
+let messages_value: MessageData[] = [];
+messages.subscribe((value) => messages_value = value);
 
-export const addMessage = (message: MessageData) => messages.update((m) => [...m, message]);
-export const resetChat = () => messages.set([]);
+export const addMessage = (message: MessageData) => {
+    messages.update((m) => [message, ...m]);
+}
 
 interface PendingMessage {
     message: string;
@@ -28,7 +31,7 @@ export const addPendingMessage = (message: string, req_id: string) => {
         message: message,
         req_id: req_id,
     };
-    pending_messages.update((m) => [...m, pending_message]);
+    pending_messages.update((m) => [pending_message, ...m]);
 };
 export const removePendingMessage = (res_id: string) => {
     pending_messages.update((m) => m.filter((e) => e.req_id !== res_id));
@@ -36,4 +39,9 @@ export const removePendingMessage = (res_id: string) => {
 export const getMessageFromPendingMessages = (res_id: string) => {
     return pending_messages_value.find((m) => m.req_id === res_id)?.message;
 };
+
+export const resetChat = () => {
+    messages.set([]);
+    pending_messages.set([]);
+}
 

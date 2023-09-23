@@ -7,7 +7,7 @@ import 'iconify-icon';
 import WS_Client from "$lib/ws/websocket";
 import QInput from "$lib/QInput.svelte";
 import QAlert from "$lib/QAlert.svelte";
-import { connection_state, connection_ip, status_bar } from "./connection";
+import { connection_state, connection_ip, status_bar } from "$lib/stores/connection";
 
 $: warning = $page.url.searchParams.get('warn') ?? '';
 $: error = $page.url.searchParams.get('err') ?? '';

@@ -2,7 +2,7 @@ import type AES_Cipher from "./crypto/aes";
 import RSA_Cipher from "./crypto/rsa";
 import CallbacksManager from "./callbacks_manager";
 
-import { connection_state, connection_ip } from "../../routes/swim/connection";
+import { connection_state, connection_ip } from "$lib/stores/connection";
 
 import ping from "./callbacks/ping"
 import server_aes from "./callbacks/server_aes";

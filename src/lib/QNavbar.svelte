@@ -1,6 +1,6 @@
 <script lang="ts">
 import { page } from "$app/stores";
-import { connection_ip } from "../routes/swim/connection";
+import { connection_ip } from "$lib/stores/connection";
 
 let current_page: 'home' | 'swim' | 'duck' | '';
 

@@ -1,16 +1,17 @@
 <script lang="ts">
+import type { PageData } from "../../$types";
 import { page } from "$app/stores";
 import { onDestroy, onMount } from "svelte";
 import { goto } from "$app/navigation";
 
 import WS_Client from "$lib/ws/websocket";
-import { messages, pending_messages, addPendingMessage, resetChat } from "$lib/stores/chat";
-import { connection_state } from "../../swim/connection";
+
+import { addPendingMessage, resetChat } from "$lib/stores/chat";
+import { connection_state } from "$lib/stores/connection";
+import { user } from "$lib/stores/user";
 
 import QInput from "$lib/QInput.svelte";
-import QMessage from "$lib/QMessage.svelte";
-import type { PageData } from "../../$types";
-    import { user } from "$lib/stores/user";
+import QMessageList from "$lib/QMessageList.svelte";
 
 interface ErrorPacket {
     from_packet_type: string;
@@ -19,14 +20,12 @@ interface ErrorPacket {
 
 export let data: PageData;
 
-let username: string;
+let new_message: string;
 
 $: lake_id = $page.params.id;
-$: username = data?.username ?? '', user.set(username), console.log($user);
+$: user.set(data?.username ?? '');
 $: ip = $page.url.searchParams.get("ip") ?? "";
 $: if ($connection_state?.includes("Failed to connect")) goto(`/swim?ip=${ip}`);
-
-let new_message: string;
 
 const join_room_error = (error: ErrorPacket) => {
     if (error.code === "NOT_FOUND") return goto("/swim?err=Oh no! Seems like you are trying to swim into an inexistent lake.");
@@ -47,8 +46,8 @@ onMount(async () => {
     resetChat();
 });
 onDestroy(() => {
-    if (WS_Client.instance)
-        WS_Client.instance.sendPacket({ type: "leave_room", data: {} });
+    if (WS_Client.instance) WS_Client.instance.sendPacket({ type: "leave_room", data: {} });
+    resetChat();
 });
 
 let counter = 0;
@@ -76,14 +75,7 @@ const sendMessage = (message: string) => {
 </svelte:head>
 
 <div class="flex flex-col items-center justify-end w-80">
-    <div class="flex flex-col items-start w-full max-h-80 overflow-y-hidden">
-        {#each $messages as data}
-            <QMessage username={data.author.username} content={data.content} />
-        {/each}
-        {#each $pending_messages as data}
-            <QMessage username={username} content={data.message} pending />
-        {/each}
-    </div>
+    <QMessageList />
 
     <form
         class="flex flex-row items-end justify-between mt-4"
@@ -91,9 +83,7 @@ const sendMessage = (message: string) => {
     >
         <div class="w-[82%]">
             <QInput
-                label="Message"
                 placeholder="Quack Quack"
-                icon="ph:chat-centered-fill"
                 bind:value={new_message}
             />
         </div>
