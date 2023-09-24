@@ -3,7 +3,6 @@ import { calculate_said, compare } from '$lib/security/hashing';
 import { accounts, type UserData } from '$lib/db/accounts';
 
 export const POST: RequestHandler = async ({ request }) => {
-    console.log('...')
 	const { aes, rsa, said } = await request.json();
     const generated_said = calculate_said(aes, rsa);
 
@@ -19,7 +18,6 @@ export const POST: RequestHandler = async ({ request }) => {
         skin: user.skin,
     }
     
-    console.log('done')
     return json({ ok: true, profile: profile }, { status: 200 });
 }
 

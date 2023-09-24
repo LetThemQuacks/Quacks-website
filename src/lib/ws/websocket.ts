@@ -10,7 +10,8 @@ import error from "./callbacks/error";
 import join_room from "./callbacks/join_confirm";
 import on_message from "./callbacks/on_message";
 import message_confirm from "./callbacks/message_confirm";
-
+import user_join from "./callbacks/user_join";
+import user_left from "./callbacks/user_leave";
 
 type Error_Handlers = {
     [from_packet_type: string]: CallableFunction,
@@ -78,6 +79,8 @@ class WS_Client {
         CallbacksManager.registerCallback('join_confirm', join_room);
         CallbacksManager.registerCallback('message', on_message);
         CallbacksManager.registerCallback('message_confirm', message_confirm);
+        CallbacksManager.registerCallback('user_join', user_join);
+        CallbacksManager.registerCallback('user_left', user_left);
     }
 
 

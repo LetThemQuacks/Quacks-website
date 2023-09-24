@@ -7,7 +7,7 @@ const error = async (data: any) => {
     if (!Object.keys(client.error_handlers).includes(data.from_packet_type)) {
         console.warn(`Error not handled: ${JSON.stringify(data)}`);
         client.ws.close();
-        await goto('/swim?warn=Unexpected Error');
+        await goto('/swim?warn=UNEXPECTED');
         return;
     }
     

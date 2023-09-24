@@ -11,7 +11,7 @@ import { connection_state } from "$lib/stores/connection";
 import { user } from "$lib/stores/user";
 
 import QInput from "$lib/QInput.svelte";
-import QMessageList from "$lib/QMessageList.svelte";
+import QChat from "$lib/QChat.svelte";
 
 interface ErrorPacket {
     from_packet_type: string;
@@ -28,7 +28,7 @@ $: ip = $page.url.searchParams.get("ip") ?? "";
 $: if ($connection_state?.includes("Failed to connect")) goto(`/swim?ip=${ip}`);
 
 const join_room_error = (error: ErrorPacket) => {
-    if (error.code === "NOT_FOUND") return goto("/swim?err=Oh no! Seems like you are trying to swim into an inexistent lake.");
+    if (error.code === "NOT_FOUND") return goto("/swim?err=NOT_FOUND");
 };
 
 onMount(async () => {
@@ -46,7 +46,7 @@ onMount(async () => {
     resetChat();
 });
 onDestroy(() => {
-    if (WS_Client.instance && $connection_state === 'Connected') WS_Client.instance.sendPacket({ type: "leave_room", data: {} });
+    if (WS_Client.instance) WS_Client.instance.sendPacket({ type: "leave_room", data: {} }, () => {});
     resetChat();
 });
 
@@ -75,7 +75,7 @@ const sendMessage = (message: string) => {
 </svelte:head>
 
 <div class="flex flex-col items-center justify-end w-80">
-    <QMessageList />
+    <QChat />
 
     <form
         class="flex flex-row items-end justify-between mt-4"

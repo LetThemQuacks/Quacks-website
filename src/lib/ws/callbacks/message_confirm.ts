@@ -1,5 +1,5 @@
 import { goto } from "$app/navigation";
-import { removePendingMessage, addMessage, getMessageFromPendingMessages } from "$lib/stores/chat";
+import { removePendingMessage, addEvent, getMessageFromPendingMessages } from "$lib/stores/chat";
 import { user } from "$lib/stores/user";
 
 const message_confirm = async (data: { res_id: string }) => {
@@ -9,14 +9,17 @@ const message_confirm = async (data: { res_id: string }) => {
     let username = '';
     const unsubscribe = user.subscribe((user) => username = user);
 
-    if (!message) return goto("/swim?warn=Unexpected Error");
-    addMessage({
-        content: message,
-        id: '',
-        author: {
-            username: username,
+    if (!message) return goto("/swim?warn=UNEXPECTED");
+    addEvent({
+        type: 'message',
+        data: {
+            content: message,
             id: '',
-        },
+            author: {
+                username: username,
+                id: '',
+            },
+        }
     });
 
     unsubscribe();

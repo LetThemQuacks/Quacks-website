@@ -1,6 +1,6 @@
 <script lang="ts">
 import { user } from "$lib/stores/user";
-import { messages } from "./stores/chat";
+import { chat } from "./stores/chat";
 
 export let username: string;
 export let content: string;
@@ -8,13 +8,9 @@ let shown_username = username;
 
 let is_me = false;
 if (username === $user) shown_username = 'You', is_me = true;
-console.log(username)
 
-const previous_author = $messages[1]?.author.username;
 let previous_is_me = false;
-
-if (previous_author === username) previous_is_me = true;
-
+if ($chat[1]?.type === 'message' && $chat[1]?.data.author.username === username) previous_is_me = true;
 </script>
 
 <div

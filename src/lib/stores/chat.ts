@@ -1,30 +1,41 @@
 import { writable } from "svelte/store";
 
+export interface User {
+    id: string;
+    username: string;
+}
+interface UserEvent {
+    type: 'join' | 'leave';
+    data: User;
+    id?: number;
+}
+
 export interface MessageData {
     content: string;
     id: string;
-    idx?: number;
-    author: {
-      id: string;
-      username: string;
-    };
+    author: User;
+}
+interface MessageEvent {
+    type: 'message';
+    data: MessageData;
+    id?: number;
 }
 
-export let messages = writable<MessageData[]>([]);
+export let chat = writable<Array<MessageEvent|UserEvent>>([]);
 
 let id_counter = -1;
-export const addMessage = (message: MessageData) => {
+export const addEvent = (event: UserEvent | MessageEvent) => {
     id_counter += 1;
-    message.idx = id_counter;
-    messages.update((m) => [message, ...m]);
+    event.id = id_counter;
+    chat.update((c) => [event, ...c]);
 }
+
 
 interface PendingMessage {
     message: string;
     idx: number;
     req_id: string;
 }
-
 export let pending_messages = writable<PendingMessage[]>([]);
 let pending_messages_value: PendingMessage[] = [];
 pending_messages.subscribe((value) => (pending_messages_value = value));
@@ -47,7 +58,7 @@ export const getMessageFromPendingMessages = (res_id: string) => {
 };
 
 export const resetChat = () => {
-    messages.set([]);
+    chat.set([]);
     pending_messages.set([]);
 }
 
