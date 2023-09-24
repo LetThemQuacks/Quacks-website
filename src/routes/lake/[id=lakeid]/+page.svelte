@@ -46,7 +46,7 @@ onMount(async () => {
     resetChat();
 });
 onDestroy(() => {
-    if (WS_Client.instance) WS_Client.instance.sendPacket({ type: "leave_room", data: {} });
+    if (WS_Client.instance && $connection_state === 'Connected') WS_Client.instance.sendPacket({ type: "leave_room", data: {} });
     resetChat();
 });
 
