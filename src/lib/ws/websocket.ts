@@ -55,7 +55,7 @@ class WS_Client {
         connection_state.set('Connecting');
         connection_ip.set(WS_Client.processIP(this.ip));
 
-        this.ws = new WebSocket(`ws://${this.ip}/room`);
+        this.ws = new WebSocket(`wss://${this.ip}/room`);
         this.connectWsFunctions();
         return this.ws;
     }
