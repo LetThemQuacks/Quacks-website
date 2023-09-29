@@ -5,14 +5,14 @@ import QMessage from "./QMessage.svelte";
 import QPendingMessage from "./QPendingMessage.svelte";
 import QUserEvent from "./QUserEvent.svelte";
 import QInput from "./QInput.svelte";
-import { stringToBase64 } from "./ws/crypto/arraybuffers";
+import { utf8ToBase64 } from "./ws/crypto/arraybuffers";
 
 let new_message: string;
 
 let counter = 0;
 const generateReqId = (data: string) => {
     counter += 1;
-    return stringToBase64(data.slice(0, 16) + counter);
+    return utf8ToBase64(data.slice(0, 16) + counter);
 }
 
 const sendMessage = (message: string) => {
@@ -20,7 +20,7 @@ const sendMessage = (message: string) => {
     WS_Client.instance.sendPacket({
         type: "send_message",
         data: {
-            message: stringToBase64(message),
+            message: utf8ToBase64(message),
             req_id: req_id,
         },
     });

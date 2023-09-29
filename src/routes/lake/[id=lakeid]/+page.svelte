@@ -42,7 +42,7 @@ onMount(async () => {
     resetChat();
 });
 onDestroy(() => {
-    // if (WS_Client.instance) WS_Client.instance.sendPacket({ type: "leave_room", data: {} }, () => {});
+    if (WS_Client.instance) WS_Client.instance.sendPacket({ type: "leave_room", data: {} }, () => {});
     resetChat();
 });
 </script>
