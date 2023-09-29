@@ -8,7 +8,7 @@ import WS_Client from "$lib/ws/websocket";
 import QInput from "$lib/QInput.svelte";
 import QAlert from "$lib/QAlert.svelte";
 import { connection_state, connection_ip, status_bar } from "$lib/stores/connection";
-import { getError, getWarn } from "./errorList";
+import { getError, getWarn } from "./errors";
 
 $: warning = getWarn($page.url.searchParams.get('warn') ?? '');
 $: error = getError($page.url.searchParams.get('err') ?? '');

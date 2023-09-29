@@ -4,7 +4,7 @@ import { getUserData } from "$lib/db/accounts";
 import jwt from "jsonwebtoken";
 import { TOKEN_PEPPER_STR } from "$env/static/private";
 
-start_mongo().then(async () => {
+await start_mongo().then(async () => {
     console.log('[mongodb] Connected!');
 }).catch((e) => {
     console.log('[mongodb] ERROR: ' + e)

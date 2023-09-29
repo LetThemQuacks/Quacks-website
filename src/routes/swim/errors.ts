@@ -2,18 +2,18 @@ interface ErrorDict {
     [error_name: string]: string;
 }
 
-const errList: ErrorDict = {
+const errors: ErrorDict = {
     'NOT_FOUND': 'Oh no! Seems like you are trying to swim into an inexistent lake.',
 }
-const warnList: ErrorDict = {
+const warnings: ErrorDict = {
     'UNEXPECTED': 'Unexpected Error Occured',
 }
 export const getError = (error: string) => {
-    if (errList[error] !== undefined) return errList[error];
+    if (errors[error] !== undefined) return errors[error];
     return null;
 }
-export const getWarn = (warn: string) => {
-    if (warnList[warn] !== undefined) return warnList[warn];
+export const getWarn = (warning: string) => {
+    if (warnings[warning] !== undefined) return warnings[warning];
     return null;
 }
 

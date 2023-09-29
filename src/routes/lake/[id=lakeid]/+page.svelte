@@ -5,12 +5,10 @@ import { onDestroy, onMount } from "svelte";
 import { goto } from "$app/navigation";
 
 import WS_Client from "$lib/ws/websocket";
-
-import { addPendingMessage, resetChat } from "$lib/stores/chat";
 import { connection_state } from "$lib/stores/connection";
+import { resetChat } from "$lib/stores/chat";
 import { user } from "$lib/stores/user";
 
-import QInput from "$lib/QInput.svelte";
 import QChat from "$lib/QChat.svelte";
 
 interface ErrorPacket {
@@ -20,12 +18,10 @@ interface ErrorPacket {
 
 export let data: PageData;
 
-let new_message: string;
-
 $: lake_id = $page.params.id;
-$: user.set(data?.username ?? '');
 $: ip = $page.url.searchParams.get("ip") ?? "";
 $: if ($connection_state?.includes("Failed to connect")) goto(`/swim?ip=${ip}`);
+$: user.set(data?.username ?? '');
 
 const join_room_error = (error: ErrorPacket) => {
     if (error.code === "NOT_FOUND") return goto("/swim?err=NOT_FOUND");
@@ -46,49 +42,17 @@ onMount(async () => {
     resetChat();
 });
 onDestroy(() => {
-    if (WS_Client.instance) WS_Client.instance.sendPacket({ type: "leave_room", data: {} }, () => {});
+    // if (WS_Client.instance) WS_Client.instance.sendPacket({ type: "leave_room", data: {} }, () => {});
     resetChat();
 });
-
-let counter = 0;
-const generateReqId = (data: string) => {
-    counter += 1;
-    return btoa(data.slice(0, 16) + counter);
-};
-
-const sendMessage = (message: string) => {
-    const req_id = generateReqId(message);
-    WS_Client.instance.sendPacket({
-        type: "send_message",
-        data: {
-            message: message,
-            req_id: req_id,
-        },
-    });
-    addPendingMessage(message, req_id);
-    new_message = "";
-};
 </script>
 
 <svelte:head>
   <title>Lake #{lake_id} - Quacks</title>
 </svelte:head>
 
-<div class="flex flex-col items-center justify-end w-80">
+<div class="w-full flex flex-row justify-between p-12 pr-24">
+    <div></div>
     <QChat />
-
-    <form
-        class="flex flex-row items-end justify-between mt-4"
-        on:submit|preventDefault={() => sendMessage(new_message)}
-    >
-        <div class="w-[82%]">
-            <QInput
-                placeholder="Quack Quack"
-                bind:value={new_message}
-            />
-        </div>
-        <button class="btn aspect-square h-12">
-            <iconify-icon icon="iconamoon:send-fill" class="text-2xl" />
-        </button>
-    </form>
 </div>
+

@@ -9,3 +9,5 @@ export const base64ToArrayBuffer = (b64_str: string) => Uint8Array.from(atob(b64
 // https://gist.github.com/72lions/4528834?permalink_comment_id=2395442#gistcomment-2395442
 export const concatArrayBuffers = (first: ArrayBuffer, second: ArrayBuffer) => new Uint8Array([...new Uint8Array(first), ...new Uint8Array(second)]).buffer;
 
+export const stringToBase64 = (str: string) => btoa(String.fromCharCode(...new TextEncoder().encode(str)));
+

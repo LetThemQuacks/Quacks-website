@@ -14,7 +14,7 @@ if ($chat[1]?.type === 'message' && $chat[1]?.data.author.username === username)
 </script>
 
 <div
-    class="flex flex-row mt-1 last:mt-0 max-w-[80%]"
+    class="flex flex-row mt-1 last:mt-0 max-w-[16rem]"
     class:self-end={is_me}
 >
     {#if !is_me && !previous_is_me}
@@ -22,8 +22,10 @@ if ($chat[1]?.type === 'message' && $chat[1]?.data.author.username === username)
     {/if}
 
     <div
-        class="flex flex-col break-words max-w-full"
-        class:ml-11={previous_is_me}
+        class="flex flex-col break-words"
+        class:ml-11={previous_is_me && !is_me}
+        class:max-w-full={is_me}
+        class:max-w-[14rem]={!is_me}
     >
         {#if !previous_is_me}
         <p
