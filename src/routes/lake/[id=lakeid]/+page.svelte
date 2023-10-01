@@ -10,6 +10,7 @@ import { resetChat } from "$lib/stores/chat";
 import { user } from "$lib/stores/user";
 
 import QChat from "$lib/QChat.svelte";
+    import { resetUsers } from "$lib/stores/users";
 
 interface ErrorPacket {
     from_packet_type: string;
@@ -44,6 +45,7 @@ onMount(async () => {
 onDestroy(() => {
     if (WS_Client.instance) WS_Client.instance.sendPacket({ type: "leave_room", data: {} }, () => {});
     resetChat();
+    resetUsers();
 });
 </script>
 

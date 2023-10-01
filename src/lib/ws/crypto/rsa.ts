@@ -5,7 +5,7 @@ class RSA_Cipher {
     exported_public_key: string | null = null;
 
     async generateKeys(length: number) {
-        const { privateKey, publicKey } = await crypto.subtle.generateKey(
+        const { privateKey, publicKey } = await window.crypto.subtle.generateKey(
             {
                 name: 'RSA-OAEP',
                 modulusLength: length,
@@ -16,11 +16,11 @@ class RSA_Cipher {
             ['encrypt', 'decrypt']
         )
     
-        const public_key_spki = await crypto.subtle.exportKey('spki', publicKey);
+        const public_key_spki = await window.crypto.subtle.exportKey('spki', publicKey);
         const public_key = this.spkiToPEM(public_key_spki)
         this.exported_public_key = public_key;
 
-        const private_key = await crypto.subtle.exportKey('pkcs8', privateKey);
+        const private_key = await window.crypto.subtle.exportKey('pkcs8', privateKey);
         await this.importKey(private_key)
 
         return { public_key }
@@ -45,7 +45,7 @@ class RSA_Cipher {
 
     async importKey(exported_private_key: ArrayBuffer) {
         // https://stackoverflow.com/a/61147526
-        this.private_key = await crypto.subtle.importKey(
+        this.private_key = await window.crypto.subtle.importKey(
                     'pkcs8',
                     exported_private_key,
                     {
@@ -59,7 +59,7 @@ class RSA_Cipher {
     
     async decrypt(cipher_text: string) {
         if (!this.private_key) throw Error('RSA key has not been imported correctly.')
-        return await crypto.subtle.decrypt(
+        return await window.crypto.subtle.decrypt(
             { name: "RSA-OAEP" },
             this.private_key,
             base64ToArrayBuffer(cipher_text)

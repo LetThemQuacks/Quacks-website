@@ -4,7 +4,7 @@ class AES_Cipher {
     key: CryptoKey | null = null;
     
     async importKey(key_bytes: ArrayBuffer) {
-        this.key = await crypto.subtle.importKey(
+        this.key = await window.crypto.subtle.importKey(
                 'raw',
                 key_bytes,
                 { name: "AES-CBC" },

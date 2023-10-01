@@ -38,7 +38,7 @@ interface PendingMessage {
 }
 export let pending_messages = writable<PendingMessage[]>([]);
 let pending_messages_value: PendingMessage[] = [];
-pending_messages.subscribe((value) => (pending_messages_value = value));
+pending_messages.subscribe((value) => pending_messages_value = value);
 
 let pending_id_counter = -1;
 export const addPendingMessage = (message: string, req_id: string) => {
