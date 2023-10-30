@@ -21,12 +21,12 @@ export const actions: Actions = {
 		const formData = await request.formData(); 
         const data = Object.fromEntries(formData.entries());
         
-        const username = data.username.toString();
+        const username = data.Username.toString();
 
         const user: UserData | null = await getUserData(username);
         if (!user) return fail(404, { error: 'Wrong username or password', username: username });
         
-        const success = verifyPassword(data.password.toString(), user.password!);
+        const success = verifyPassword(data.Password.toString(), user.password!);
         if (!success) return fail(404, { error: 'Wrong username or password', username: username });
         
         const { token } = generateToken({ username: user.username, _id: user._id! });

@@ -7,6 +7,7 @@ import 'iconify-icon';
 import WS_Client from "$lib/ws/websocket";
 import QInput from "$lib/QInput.svelte";
 import QAlert from "$lib/QAlert.svelte";
+import QCheckbox from "$lib/QCheckbox.svelte";
 import { connection_state, connection_ip, status_bar } from "$lib/stores/connection";
 import { getError, getWarn } from "./errors";
 
@@ -16,15 +17,19 @@ $: ip_param = $page.url.searchParams.get('ip') ?? '';
 $: $connection_state, $connection_ip, status_bar.set(`${$connection_state} to ${$connection_ip}`)
 
 let options_visible = false;
+let custom_server = false;
 
 let id: string;
 let new_ws_ip: string;
+$: if (WS_Client.instance && !custom_server) changeWsIp('');
 
-const gotoLake = (id: string) => goto(`/lake/${id.toUpperCase()}${WS_Client.instance.ip !== WS_Client.default_ip ? `?ip=${WS_Client.instance.ip}` : ''}`);
+const gotoLake = (id: string) => {
+    goto(`/lake/${id.toUpperCase()}${WS_Client.instance.ip !== WS_Client.default_ip ? `?ip=${WS_Client.instance.ip}` : ''}`);
+}
 
 const changeWsIp = (ip_to_change: string) => {
     if (WS_Client.processIP(ip_to_change) === WS_Client.processIP(WS_Client.instance.ip)) {
-        if ($connection_state === 'Connected') {
+        if ($connection_state === 'Connected' && $connection_ip !== 'Quacks Server') {
             return status_bar.set(`You are already connected to ${$connection_ip}`);
         }
     }
@@ -37,9 +42,10 @@ const changeWsIp = (ip_to_change: string) => {
 
 onMount(() => {
     if (!WS_Client.instance) new WS_Client(ip_param);
-    else if (WS_Client.instance.ip !== WS_Client.default_ip) {
+    if (WS_Client.instance.ip !== WS_Client.default_ip) {
         if (WS_Client.instance.ip !== ip_param) new WS_Client(ip_param, true);
         options_visible = true;
+        custom_server = true;
     }
     
     new_ws_ip = ip_param;
@@ -88,6 +94,8 @@ onMount(() => {
         </button>
 
         {#if options_visible}
+            <QCheckbox text="custom server" bind:value={custom_server} disabled={$connection_state === 'Connecting'} />
+            {#if custom_server}
             <form class="flex flex-row items-end justify-between" on:submit|preventDefault={() => changeWsIp(new_ws_ip)}>
                 <div class="w-[82%]">
                     <QInput
@@ -95,13 +103,13 @@ onMount(() => {
                         placeholder="0.0.0.0"
                         icon="ph:globe-simple-bold"
                         bind:value={new_ws_ip}
-                        not_required
                     />
                 </div>
                 <button class="btn aspect-square h-12 disabled:cursor-progress" disabled={$connection_state === 'Connecting'}>
                     <iconify-icon icon="material-symbols:fitbit-check-small-rounded" class="text-4xl" />
                 </button>
             </form>
+            {/if}
             {#if connection_ip}
                 <p class="font-semibold mt-2"
                     class:text-green={$status_bar.includes('Connected')}

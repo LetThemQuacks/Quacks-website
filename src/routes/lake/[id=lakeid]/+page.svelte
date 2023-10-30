@@ -7,10 +7,10 @@ import { goto } from "$app/navigation";
 import WS_Client from "$lib/ws/websocket";
 import { connection_state } from "$lib/stores/connection";
 import { resetChat } from "$lib/stores/chat";
+import { resetUsers } from "$lib/stores/users";
 import { user } from "$lib/stores/user";
 
 import QChat from "$lib/QChat.svelte";
-    import { resetUsers } from "$lib/stores/users";
 
 interface ErrorPacket {
     from_packet_type: string;

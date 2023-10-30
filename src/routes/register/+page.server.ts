@@ -21,8 +21,8 @@ export const actions: Actions = {
 		const formData = await request.formData();         
         const data = Object.fromEntries(formData.entries());
         
-        const username = data.username.toString();
-        const pwd_input = data.password.toString();
+        const username = data.Username.toString();
+        const pwd_input = data.Password.toString();
         const password = hash_password(pwd_input); 
     
         if (await accounts.findOne({ username: username })) {

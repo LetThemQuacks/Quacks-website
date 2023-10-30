@@ -9,9 +9,25 @@
     scroll-behavior: smooth;
 }
 
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 @layer components { 
     * {
-        @apply font-["Lexend"]
+        @apply font-["Lexend"];
+    }
+
+    body {
+        @apply bg-dark;
     }
 
     ::selection {
@@ -28,7 +44,7 @@
 
     .btn {
         @apply outline-none relative shadow-lg font-semibold text-xl text-center
-                text-dark hover:text-yellow focus:text-yellow disabled:text-white bg-yellow hover:bg-dark focus:bg-dark disabled:bg-dark
+                text-dark hover:text-yellow disabled:text-white bg-yellow hover:bg-dark disabled:bg-dark
                 border-[3px] border-yellow disabled:opacity-60 disabled:cursor-not-allowed grid place-items-center rounded-lg h-16 transition-all duration-300
     }
     .a-btn {

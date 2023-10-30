@@ -41,13 +41,13 @@
 
     <form method="POST" use:enhance>
         <QInput
-            label="username"
+            label="Username"
             bind:value={username}
             placeholder="LorixDev"
             icon="ph:user-bold"
         />
         <QInput
-            label="password"
+            label="Password"
             bind:value={password}
             type="password"
             placeholder="insert password"

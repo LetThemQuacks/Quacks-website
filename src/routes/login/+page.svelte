@@ -44,7 +44,7 @@
 
     <form method="POST" use:enhance>
         <QInput
-            label="username"
+            label="Username"
             placeholder="LorixDev"
             icon="ph:user-bold"
 
@@ -52,7 +52,7 @@
         />
 
         <QInput
-            label="password"
+            label="Password"
             type="password"
             placeholder="Insert password"
             icon="mdi:lock"
