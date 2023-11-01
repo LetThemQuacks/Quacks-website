@@ -11,7 +11,7 @@ const add = () => { if (value < 99) value += 1 };
 $: if (value <= 2 || value >= 99) clearInterval(interval);
 </script>
 
-<div class="flex flex-col">
+<div class="flex flex-col mb-2">
     <label
         for="input"
         class="ml-1 font-medium text-base text-yellow transition-colors duration-300"

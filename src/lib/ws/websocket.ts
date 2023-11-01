@@ -12,7 +12,6 @@ import on_message from "./callbacks/on_message";
 import message_confirm from "./callbacks/message_confirm";
 import user_join from "./callbacks/user_join";
 import user_left from "./callbacks/user_leave";
-import { arrayBufferToBase64, stringToArrayBuffer } from "./crypto/arraybuffers";
 
 type Error_Handlers = {
     [from_packet_type: string]: CallableFunction,

@@ -21,23 +21,21 @@ let custom_server = false;
 
 let id: string;
 let new_ws_ip: string;
-$: if (WS_Client.instance && !custom_server) changeWsIp('');
 
-const gotoLake = (id: string) => {
-    goto(`/lake/${id.toUpperCase()}${WS_Client.instance.ip !== WS_Client.default_ip ? `?ip=${WS_Client.instance.ip}` : ''}`);
-}
+const gotoLake = (id: string) => goto(`/lake/${id.toUpperCase()}${WS_Client.instance.ip !== WS_Client.default_ip ? `?ip=${WS_Client.instance.ip}` : ''}`);
 
-const changeWsIp = (ip_to_change: string) => {
-    if (WS_Client.processIP(ip_to_change) === WS_Client.processIP(WS_Client.instance.ip)) {
+const changeWsIp = (new_ip: string) => {
+    if (WS_Client.processIP(new_ip) === WS_Client.processIP(WS_Client.instance.ip)) {
         if ($connection_state === 'Connected' && $connection_ip !== 'Quacks Server') {
             return status_bar.set(`You are already connected to ${$connection_ip}`);
         }
     }
 
-    new WS_Client(ip_to_change, true);
+    new WS_Client(new_ip, true);
+    new_ws_ip = new_ip;
     
-    if (!ip_to_change) return goto('/swim');
-    else if (ip_to_change !== WS_Client.default_ip) return goto(`/swim?ip=${ip_to_change}`);
+    if (!new_ip) return goto('/swim');
+    else if (new_ip !== WS_Client.default_ip) return goto(`/swim?ip=${new_ip}`);
 }
 
 onMount(() => {
@@ -71,7 +69,7 @@ onMount(() => {
         <h1 class="font-extrabold text-white text-5xl">Let's <span class="text-yellow">Swim</span>!</h1>
     </div>
     
-    <a href="/create" class="btn w-full mt-6 mb-6">Create</a>
+    <a href={`/create/${ip_param ? `?ip=${ip_param}` : ''}`} class="btn w-full mt-6 mb-6">Create</a>
     
     <form on:submit|preventDefault={() => gotoLake(id)}>
         <QInput
@@ -94,7 +92,7 @@ onMount(() => {
         </button>
 
         {#if options_visible}
-            <QCheckbox text="custom server" bind:value={custom_server} disabled={$connection_state === 'Connecting'} />
+            <QCheckbox text="custom server" bind:value={custom_server} disabled={$connection_state === 'Connecting'} on:disabled={() => changeWsIp('')} />
             {#if custom_server}
             <form class="flex flex-row items-end justify-between" on:submit|preventDefault={() => changeWsIp(new_ws_ip)}>
                 <div class="w-[82%]">
