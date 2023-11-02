@@ -13,6 +13,7 @@ interface UserEvent {
 export interface MessageData {
     content: string;
     id: string;
+    color: string;
     author: User;
 }
 interface MessageEvent {

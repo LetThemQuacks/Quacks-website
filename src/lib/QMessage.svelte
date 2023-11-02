@@ -4,6 +4,7 @@ import { chat } from "./stores/chat";
 
 export let username: string;
 export let content: string;
+export let color: string;
 let shown_username = username;
 
 let is_me = false;
@@ -18,7 +19,7 @@ if ($chat[1]?.type === 'message' && $chat[1]?.data.author.username === username)
     class:self-end={is_me}
 >
     {#if !is_me && !previous_is_me}
-        <div class="mr-3 h-8 aspect-square rounded-lg bg-yellow"></div>
+        <div class={`mr-3 h-8 aspect-square rounded-lg bg-[#${color}]`} ></div>
     {/if}
 
     <div
@@ -29,7 +30,7 @@ if ($chat[1]?.type === 'message' && $chat[1]?.data.author.username === username)
     >
         {#if !previous_is_me}
         <p
-            class="text-yellow text-sm font-semibold"
+            class={`text-[#${color}] text-sm font-semibold`}
             class:text-right={is_me}
             class:text-left={!is_me}
         >{shown_username}</p>
