@@ -25,6 +25,22 @@ let new_ws_ip: string;
 $: ip_param = $page.url.searchParams.get('ip') ?? '';
 $: $connection_state, $connection_ip, status_bar.set(`${$connection_state} to ${$connection_ip}`)
 
+const createLake = () => {
+    let data: { name: string, password?: string, max_joins: number, ephemeral?: boolean } = {
+        name: lake_name,
+        max_joins: max_ducks,
+    };
+    if (need_password && password) data.password = password;
+    if (ephemeral_lake) data.ephemeral = ephemeral_lake;
+
+    WS_Client.instance.sendPacket(
+        {
+            type: "create_room",
+            data: data,
+        },
+    );
+}
+
 const changeWsIp = (new_ip: string) => {
     if (WS_Client.processIP(new_ip) === WS_Client.processIP(WS_Client.instance.ip)) {
         if ($connection_state === 'Connected' && $connection_ip !== 'Quacks Server') {
@@ -53,11 +69,11 @@ onMount(() => {
 </script>
 
 <div class="w-80">
-    <div class="mb-2 flex flex-row items-center">
+    <div class="mb-4 flex flex-row items-center">
         <h1 class="font-extrabold text-white text-5xl">Let's <span class="text-yellow">Create</span>!</h1>
     </div>
     
-    <form>
+    <form on:submit|preventDefault={() => createLake()}>
         <QInput
             label="Lake Name"
             placeholder="Quacks Party"

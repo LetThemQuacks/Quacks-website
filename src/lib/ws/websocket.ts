@@ -7,11 +7,12 @@ import { connection_state, connection_ip } from "$lib/stores/connection";
 import ping from "./callbacks/ping"
 import server_aes from "./callbacks/server_aes";
 import error from "./callbacks/error";
-import join_room from "./callbacks/join_confirm";
+import join_confirm from "./callbacks/join_confirm";
 import on_message from "./callbacks/on_message";
 import message_confirm from "./callbacks/message_confirm";
 import user_join from "./callbacks/user_join";
 import user_left from "./callbacks/user_leave";
+import create_confirm from "./callbacks/create_confirm";
 
 type Error_Handlers = {
     [from_packet_type: string]: CallableFunction,
@@ -76,11 +77,12 @@ class WS_Client {
         CallbacksManager.registerCallback('ping', ping)
         CallbacksManager.registerCallback('error', error);
         CallbacksManager.registerCallback('server_aes', server_aes);
-        CallbacksManager.registerCallback('join_confirm', join_room);
+        CallbacksManager.registerCallback('join_confirm', join_confirm);
         CallbacksManager.registerCallback('message', on_message);
         CallbacksManager.registerCallback('message_confirm', message_confirm);
         CallbacksManager.registerCallback('user_join', user_join);
         CallbacksManager.registerCallback('user_left', user_left);
+        CallbacksManager.registerCallback('create_confirm', create_confirm);
     }
 
 

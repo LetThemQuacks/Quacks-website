@@ -1,7 +1,7 @@
 import { addEvent } from "$lib/stores/chat";
 import { user } from "$lib/stores/user";
 
-const join_room = async (_: undefined) => {
+const join_confirm = async (_: undefined) => {
     let username = 'You';
     const unsubscribe = user.subscribe((value) => username = value);
     addEvent({
@@ -14,5 +14,5 @@ const join_room = async (_: undefined) => {
     unsubscribe();
 }
 
-export default join_room;
+export default join_confirm;
 

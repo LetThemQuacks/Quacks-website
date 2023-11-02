@@ -41,7 +41,9 @@ onMount(async () => {
         join_room_error
     );
     resetChat();
+
 });
+
 onDestroy(() => {
     if (WS_Client.instance) WS_Client.instance.sendPacket({ type: "leave_room", data: {} }, () => {});
     resetChat();
