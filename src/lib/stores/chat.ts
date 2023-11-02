@@ -3,6 +3,7 @@ import { writable } from "svelte/store";
 export interface User {
     id: string;
     username: string;
+    color: string;
 }
 interface UserEvent {
     type: 'join' | 'leave';
@@ -13,7 +14,6 @@ interface UserEvent {
 export interface MessageData {
     content: string;
     id: string;
-    color: string;
     author: User;
 }
 interface MessageEvent {

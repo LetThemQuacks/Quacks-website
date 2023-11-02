@@ -37,7 +37,7 @@ const sendMessage = (message: string) => {
         {/each}
         {#each $chat as event (event.id)}
             {#if event.type === 'message'}
-                <QMessage username={event.data.author.username} content={event.data.content} color={event.data.color} />
+                <QMessage username={event.data.author.username} content={event.data.content} color={event.data.author.color} />
             {:else if event.type === 'join' || event.type === 'leave'}
                 <QUserEvent type={event.type} username={event.data.username} />
             {/if}
