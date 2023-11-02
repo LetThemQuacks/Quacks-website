@@ -5,6 +5,7 @@ import CallbacksManager from "./callbacks_manager";
 import { connection_state, connection_ip } from "$lib/stores/connection";
 
 import ping from "./callbacks/ping"
+import purge from "./callbacks/purge"
 import error from "./callbacks/error";
 import server_aes from "./callbacks/server_aes";
 import server_conf from "./callbacks/server_conf";
@@ -76,6 +77,7 @@ class WS_Client {
 
     private registerCallbacks() {
         CallbacksManager.registerCallback('ping', ping)
+        CallbacksManager.registerCallback('purge', purge)
         CallbacksManager.registerCallback('error', error);
         CallbacksManager.registerCallback('server_aes', server_aes);
         CallbacksManager.registerCallback('server_conf', server_conf);

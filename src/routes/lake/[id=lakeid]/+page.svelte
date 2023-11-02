@@ -22,10 +22,14 @@ export let data: PageData;
 $: lake_id = $page.params.id;
 $: ip = $page.url.searchParams.get("ip") ?? "";
 $: if ($connection_state?.includes("Failed to connect")) goto(`/swim?ip=${ip}`);
+
 $: user.set(data?.username ?? '');
 
 const join_room_error = (error: ErrorPacket) => {
     if (error.code === "NOT_FOUND") return goto("/swim?err=NOT_FOUND");
+    if (error.code === "PASSWORD_NEEDED") {
+        return goto(`/swim?id=${lake_id}&err=PASSWORD_NEEDED`);
+    }
 };
 
 onMount(async () => {

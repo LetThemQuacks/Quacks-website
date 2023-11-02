@@ -15,6 +15,7 @@ import { getError, getWarn } from "./errors";
 $: warning = getWarn($page.url.searchParams.get('warn') ?? '');
 $: error = getError($page.url.searchParams.get('err') ?? '');
 $: ip_param = $page.url.searchParams.get('ip') ?? '';
+$: id_param = $page.url.searchParams.get('id') ?? '';
 $: $connection_state, $connection_ip, status_bar.set(`${$connection_state} to ${$connection_ip}`)
 
 let options_visible = false;
@@ -46,7 +47,7 @@ onMount(() => {
         options_visible = true;
         custom_server = true;
     }
-    
+    id = id_param;
     new_ws_ip = ip_param;
 })
 

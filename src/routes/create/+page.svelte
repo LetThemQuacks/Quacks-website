@@ -27,7 +27,7 @@ let new_ws_ip: string;
 $: ip_param = $page.url.searchParams.get('ip') ?? '';
 $: $connection_state, $connection_ip, status_bar.set(`${$connection_state} to ${$connection_ip}`);
 $: if ($configs.room_creation?.force_ephemeral) ephemeral_lake = true;
-$: if (WS_Client.instance && !$configs.room_creation?.allow) goto('/swim?err=ROOM_CREATION_NOT_ALLOWED');
+$: if ($configs.room_creation && !$configs.room_creation?.allow) goto('/swim?err=ROOM_CREATION_NOT_ALLOWED');
 
 const createLake = () => {
     let data: { name: string, password?: string, max_joins: number, ephemeral: boolean } = {
