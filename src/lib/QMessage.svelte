@@ -19,7 +19,7 @@ if ($chat[1]?.type === 'message' && $chat[1]?.data.author.username === username)
     class:self-end={is_me}
 >
     {#if !is_me && !previous_is_me}
-        <div class={`mr-3 h-8 aspect-square rounded-lg bg-[#${color}]`} ></div>
+        <div class="mr-3 h-8 aspect-square rounded-lg" style={`background-color: #${color}`} ></div>
     {/if}
 
     <div
@@ -30,7 +30,8 @@ if ($chat[1]?.type === 'message' && $chat[1]?.data.author.username === username)
     >
         {#if !previous_is_me}
         <p
-            class={`text-[#${color}] text-sm font-semibold`}
+            style={`color: #${color}`}
+            class="text-sm font-semibold"
             class:text-right={is_me}
             class:text-left={!is_me}
         >{shown_username}</p>
