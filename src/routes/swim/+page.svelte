@@ -1,5 +1,7 @@
 <script lang="ts">
 import { page } from "$app/stores";
+import { connection_state, connection_ip, status_bar } from "$lib/stores/connection";
+import { configs } from "$lib/stores/server_configs";
 import { onMount } from "svelte";
 import { goto } from "$app/navigation";
 import 'iconify-icon';
@@ -8,7 +10,6 @@ import WS_Client from "$lib/ws/websocket";
 import QInput from "$lib/QInput.svelte";
 import QAlert from "$lib/QAlert.svelte";
 import QCheckbox from "$lib/QCheckbox.svelte";
-import { connection_state, connection_ip, status_bar } from "$lib/stores/connection";
 import { getError, getWarn } from "./errors";
 
 $: warning = getWarn($page.url.searchParams.get('warn') ?? '');
@@ -69,7 +70,14 @@ onMount(() => {
         <h1 class="font-extrabold text-white text-5xl">Let's <span class="text-yellow">Swim</span>!</h1>
     </div>
     
-    <a href={`/create/${ip_param ? `?ip=${ip_param}` : ''}`} class="btn w-full mt-6 mb-6">Create</a>
+    <button
+        type="button"
+        on:click={() => goto(`/create/${ip_param ? `?ip=${ip_param}` : ''}`)} 
+        disabled={!$configs.room_creation?.allow || $connection_state !== 'Connected'}
+        class="btn w-full mt-6 mb-6"
+    >
+        Create
+    </button>
     
     <form on:submit|preventDefault={() => gotoLake(id)}>
         <QInput
@@ -98,7 +106,7 @@ onMount(() => {
                 <div class="w-[82%]">
                     <QInput
                         label="Custom Server IP"
-                        placeholder="0.0.0.0"
+                        placeholder="0.0.0.0:5000"
                         icon="ph:globe-simple-bold"
                         bind:value={new_ws_ip}
                     />

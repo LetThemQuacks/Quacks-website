@@ -1,9 +1,11 @@
 <script lang="ts">
 import { connection_state, connection_ip, status_bar } from "$lib/stores/connection";
+import { configs } from "$lib/stores/server_configs";
 import { page } from "$app/stores";
 import { goto } from "$app/navigation";
 import { onMount } from "svelte";
 import WS_Client from "$lib/ws/websocket";
+
 
 import QInput from "$lib/QInput.svelte";
 import QCounter from "$lib/QCounter.svelte";
@@ -23,15 +25,17 @@ let custom_server = false;
 let new_ws_ip: string;
 
 $: ip_param = $page.url.searchParams.get('ip') ?? '';
-$: $connection_state, $connection_ip, status_bar.set(`${$connection_state} to ${$connection_ip}`)
+$: $connection_state, $connection_ip, status_bar.set(`${$connection_state} to ${$connection_ip}`);
+$: if ($configs.room_creation?.force_ephemeral) ephemeral_lake = true;
+$: if (WS_Client.instance && !$configs.room_creation?.allow) goto('/swim?err=ROOM_CREATION_NOT_ALLOWED');
 
 const createLake = () => {
-    let data: { name: string, password?: string, max_joins: number, ephemeral?: boolean } = {
+    let data: { name: string, password?: string, max_joins: number, ephemeral: boolean } = {
         name: lake_name,
         max_joins: max_ducks,
+        ephemeral: ephemeral_lake,
     };
     if (need_password && password) data.password = password;
-    if (ephemeral_lake) data.ephemeral = ephemeral_lake;
 
     WS_Client.instance.sendPacket(
         {
@@ -84,7 +88,10 @@ onMount(() => {
         
         <div class="flex flex-row justify-between">
             <QCounter label="Max Ducks" bind:value={max_ducks} />
-            <QSwitch label="Ephemeral" bind:value={ephemeral_lake} />
+            <QSwitch
+                label="Ephemeral" bind:value={ephemeral_lake}
+                disabled={$configs.room_creation?.force_ephemeral}
+            />
         </div>
         
         <QCheckbox text="hire a guardian" bind:value={need_password} />
@@ -99,7 +106,7 @@ onMount(() => {
         />
         {/if}
        
-       <button class="btn w-full mt-4" disabled={$connection_state !== 'Connected'}>Create</button> 
+       <button type="submit" class="btn w-full mt-4" disabled={$connection_state !== 'Connected'}>Create</button> 
     </form>
 
 
@@ -116,7 +123,7 @@ onMount(() => {
                 <div class="w-[82%]">
                     <QInput
                         label="Custom Server IP"
-                        placeholder="0.0.0.0"
+                        placeholder="0.0.0.0:5000"
                         icon="ph:globe-simple-bold"
                         bind:value={new_ws_ip}
                     />

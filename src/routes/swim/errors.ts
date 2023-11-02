@@ -4,9 +4,10 @@ interface ErrorDict {
 
 const errors: ErrorDict = {
     'NOT_FOUND': 'Oh no! Seems like you are trying to swim into an inexistent lake.',
+    'ROOM_CREATION_NOT_ALLOWED': 'The ducks\' guardian prevents you from creating new lakes',
 }
 const warnings: ErrorDict = {
-    'UNEXPECTED': 'Unexpected Error Occured',
+    'UNEXPECTED': 'Unexpected error occured',
 }
 export const getError = (error: string) => {
     if (errors[error] !== undefined) return errors[error];
