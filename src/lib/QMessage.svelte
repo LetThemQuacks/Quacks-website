@@ -4,7 +4,7 @@ import { chat } from "./stores/chat";
 
 export let username: string;
 export let content: string;
-export let color: string;
+export let color: string = 'efb820';
 let shown_username = username;
 
 let is_me = false;

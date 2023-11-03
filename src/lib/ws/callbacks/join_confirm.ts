@@ -1,17 +1,10 @@
-import { addEvent } from "$lib/stores/chat";
-import { user } from "$lib/stores/user";
+import type { User, MessageEvent, SystemEvent } from "$lib/stores/chat";
+import { users } from "$lib/stores/users";
+import { chat } from "$lib/stores/chat";
 
-const join_confirm = async (_: undefined) => {
-    let username = 'You';
-    const unsubscribe = user.subscribe((value) => username = value);
-    addEvent({
-        type: 'join',
-        data: {
-            username: username,
-            id: '',
-        }
-    });
-    unsubscribe();
+const join_confirm = (data: { online: User[], chat: (MessageEvent | SystemEvent)[] }) => {
+    users.set(data.online);
+    chat.set(data.chat);
 }
 
 export default join_confirm;

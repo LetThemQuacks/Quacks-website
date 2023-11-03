@@ -9,6 +9,7 @@ import purge from "./callbacks/purge"
 import error from "./callbacks/error";
 import server_aes from "./callbacks/server_aes";
 import server_conf from "./callbacks/server_conf";
+import system_message from "./callbacks/system_message";
 import join_confirm from "./callbacks/join_confirm";
 import on_message from "./callbacks/on_message";
 import message_confirm from "./callbacks/message_confirm";
@@ -81,6 +82,7 @@ class WS_Client {
         CallbacksManager.registerCallback('error', error);
         CallbacksManager.registerCallback('server_aes', server_aes);
         CallbacksManager.registerCallback('server_conf', server_conf);
+        CallbacksManager.registerCallback('system_message', system_message);
         CallbacksManager.registerCallback('join_confirm', join_confirm);
         CallbacksManager.registerCallback('message', on_message);
         CallbacksManager.registerCallback('message_confirm', message_confirm);

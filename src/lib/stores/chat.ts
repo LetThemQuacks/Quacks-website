@@ -2,30 +2,33 @@ import { writable } from "svelte/store";
 
 export interface User {
     id: string;
-    username: string;
-    color: string;
+    username?: string;
+    color?: string;
 }
-interface UserEvent {
-    type: 'join' | 'leave';
-    data: User;
-    id?: number;
-}
-
 export interface MessageData {
     content: string;
     id: string;
     author: User;
 }
-interface MessageEvent {
+export interface MessageEvent {
     type: 'message';
     data: MessageData;
     id?: number;
 }
+export interface SystemData {
+    content: string;
+    color: string;
+}
+export interface SystemEvent {
+    type: 'system';
+    data: SystemData;
+    id?: number;
+}
 
-export let chat = writable<Array<MessageEvent|UserEvent>>([]);
+export let chat = writable<Array<MessageEvent|SystemEvent>>([]);
 
 let id_counter = -1;
-export const addEvent = (event: UserEvent | MessageEvent) => {
+export const addEvent = (event: SystemEvent | MessageEvent) => {
     id_counter += 1;
     event.id = id_counter;
     chat.update((c) => [event, ...c]);

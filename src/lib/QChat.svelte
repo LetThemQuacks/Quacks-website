@@ -3,7 +3,7 @@ import WS_Client from "./ws/websocket";
 import { chat, pending_messages, addPendingMessage } from "./stores/chat";
 import QMessage from "./QMessage.svelte";
 import QPendingMessage from "./QPendingMessage.svelte";
-import QUserEvent from "./QUserEvent.svelte";
+import QSystemEvent from "./QSystemEvent.svelte";
 import QInput from "./QInput.svelte";
 import { utf8ToBase64 } from "./ws/crypto/arraybuffers";
 
@@ -37,9 +37,9 @@ const sendMessage = (message: string) => {
         {/each}
         {#each $chat as event (event.id)}
             {#if event.type === 'message'}
-                <QMessage username={event.data.author.username} content={event.data.content} color={event.data.author.color} />
-            {:else if event.type === 'join' || event.type === 'leave'}
-                <QUserEvent type={event.type} username={event.data.username} />
+                <QMessage username={event.data.author.username ?? ''} content={event.data.content} color={event.data.author.color} />
+            {:else if event.type === 'system'}
+                <QSystemEvent content={event.data.content} color={event.data.color} />
             {/if}
         {/each}
     </div>
