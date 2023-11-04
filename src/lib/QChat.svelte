@@ -5,7 +5,7 @@ import QMessage from "./QMessage.svelte";
 import QPendingMessage from "./QPendingMessage.svelte";
 import QSystemEvent from "./QSystemEvent.svelte";
 import QInput from "./QInput.svelte";
-import { utf8ToBase64 } from "./ws/crypto/arraybuffers";
+import { utf8ToBase64, base64ToUtf8 } from "./ws/crypto/arraybuffers";
 
 let new_message: string;
 
@@ -35,11 +35,11 @@ const sendMessage = (message: string) => {
         {#each $pending_messages as data (data.idx)}
             <QPendingMessage content={data.message} />
         {/each}
-        {#each $chat as event (event.id)}
+        {#each $chat as event (event.data.id)}
             {#if event.type === 'message'}
-                <QMessage username={event.data.author.username ?? ''} content={event.data.content} color={event.data.author.color} />
+                <QMessage username={event.data.author.username ?? ''} content={base64ToUtf8(event.data.content)} color={event.data.author.color} />
             {:else if event.type === 'system'}
-                <QSystemEvent content={event.data.content} color={event.data.color} />
+                <QSystemEvent content={base64ToUtf8(event.data.content)} color={event.data.color} />
             {/if}
         {/each}
     </div>

@@ -13,27 +13,20 @@ export interface MessageData {
 export interface MessageEvent {
     type: 'message';
     data: MessageData;
-    id?: number;
 }
 export interface SystemData {
     content: string;
     color: string;
+    id: string;
 }
 export interface SystemEvent {
     type: 'system';
     data: SystemData;
-    id?: number;
 }
 
 export let chat = writable<Array<MessageEvent|SystemEvent>>([]);
 
-let id_counter = -1;
-export const addEvent = (event: SystemEvent | MessageEvent) => {
-    id_counter += 1;
-    event.id = id_counter;
-    chat.update((c) => [event, ...c]);
-}
-
+export const addEvent = (event: SystemEvent | MessageEvent) => chat.update((c) => [event, ...c]);
 
 interface PendingMessage {
     message: string;

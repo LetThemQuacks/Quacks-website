@@ -2,7 +2,7 @@ import { goto } from "$app/navigation";
 import { removePendingMessage, addEvent, getMessageFromPendingMessages } from "$lib/stores/chat";
 import { user } from "$lib/stores/user";
 
-const message_confirm = async (data: { res_id: string, color: string, action?: 'hide' }) => {
+const message_confirm = async (data: { res_id: string, msg_id: string, color: string, action?: 'hide' }) => {
     const message = getMessageFromPendingMessages(data.res_id);
     removePendingMessage(data.res_id);
 
@@ -15,7 +15,7 @@ const message_confirm = async (data: { res_id: string, color: string, action?: '
         type: 'message',
         data: {
             content: message,
-            id: '',
+            id: data.msg_id,
             author: {
                 username: username,
                 id: '',
