@@ -1,3 +1,4 @@
+import { utf8ToBase64 } from "$lib/ws/crypto/arraybuffers";
 import { writable } from "svelte/store";
 
 export interface User {
@@ -51,7 +52,7 @@ export const removePendingMessage = (res_id: string) => {
     pending_messages.update((m) => m.filter((e) => e.req_id !== res_id));
 };
 export const getMessageFromPendingMessages = (res_id: string) => {
-    return pending_messages_value.find((m) => m.req_id === res_id)?.message;
+    return utf8ToBase64(pending_messages_value.find((m) => m.req_id === res_id)?.message ?? '');
 };
 
 export const resetChat = () => {
