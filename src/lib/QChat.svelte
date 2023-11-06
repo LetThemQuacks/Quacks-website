@@ -1,6 +1,7 @@
 <script lang="ts">
 import WS_Client from "./ws/websocket";
 import { chat, pending_messages, addPendingMessage } from "./stores/chat";
+import { you } from "./stores/you";
 import QMessage from "./QMessage.svelte";
 import QPendingMessage from "./QPendingMessage.svelte";
 import QSystemEvent from "./QSystemEvent.svelte";
@@ -31,13 +32,19 @@ const sendMessage = (message: string) => {
 
 
 <div class="flex flex-col items-end justify-end w-80 h-[70vh] sm:mt-24">
-    <div class="flex flex-col-reverse items-start w-80 max-h-full pr-3 overflow-y-auto">
-        {#each $pending_messages as data (data.idx)}
+    <div class="flex flex-col-reverse items-start w-80 max-h-full pr-3 pt-1 overflow-y-auto">
+        {#each $pending_messages as data (data.id)}
             <QPendingMessage content={data.message} />
         {/each}
-        {#each $chat as event (event.data.id)}
+        {#each $chat as event, idx (event.data.id)}
             {#if event.type === 'message'}
-                <QMessage username={event.data.author.username ?? ''} content={base64ToUtf8(event.data.content)} color={event.data.author.color} />
+                <QMessage
+                    idx={idx}
+                    id={event.data.author.id}
+                    username={event.data.author?.username ?? ''}
+                    content={base64ToUtf8(event.data.content)}
+                    color={event.data.author?.color ?? ''}
+                />
             {:else if event.type === 'system'}
                 <QSystemEvent content={base64ToUtf8(event.data.content)} color={event.data.color} />
             {/if}
@@ -55,7 +62,7 @@ const sendMessage = (message: string) => {
                 bind:value={new_message}
             />
         </div>
-        <button class="btn aspect-square h-12">
+        <button type="submit" class="btn aspect-square h-12" disabled={!$you}>
             <iconify-icon icon="iconamoon:send-fill" class="text-2xl" />
         </button>
     </form>

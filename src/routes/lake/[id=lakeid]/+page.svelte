@@ -1,5 +1,4 @@
 <script lang="ts">
-import type { PageData } from "../../$types";
 import { page } from "$app/stores";
 import { onDestroy, onMount } from "svelte";
 import { goto } from "$app/navigation";
@@ -8,7 +7,6 @@ import WS_Client from "$lib/ws/websocket";
 import { connection_state } from "$lib/stores/connection";
 import { resetChat } from "$lib/stores/chat";
 import { resetUsers } from "$lib/stores/users";
-import { user } from "$lib/stores/user";
 
 import QChat from "$lib/QChat.svelte";
 
@@ -17,13 +15,9 @@ interface ErrorPacket {
     code: string;
 }
 
-export let data: PageData;
-
 $: lake_id = $page.params.id;
 $: ip = $page.url.searchParams.get("ip") ?? "";
-$: if ($connection_state?.includes("Failed to connect")) goto(`/swim?ip=${ip}`);
-
-$: user.set(data?.username ?? '');
+$: if ($connection_state?.includes("Failed to connect")) goto(`/swim${WS_Client.instance.ip !== WS_Client.default_ip ? `?ip=${WS_Client.instance.ip}` : ''}`);
 
 const join_room_error = (error: ErrorPacket) => {
     if (error.code === "NOT_FOUND") return goto("/swim?err=NOT_FOUND");

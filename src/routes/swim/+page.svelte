@@ -47,6 +47,7 @@ onMount(() => {
         options_visible = true;
         custom_server = true;
     }
+
     id = id_param;
     new_ws_ip = ip_param;
 })

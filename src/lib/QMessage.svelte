@@ -1,17 +1,22 @@
 <script lang="ts">
-import { user } from "$lib/stores/user";
+import { you } from "$lib/stores/you";
 import { chat } from "./stores/chat";
+import { authors, online_users } from "./stores/users";
 
+export let id: string;
+export let idx: number;
 export let username: string;
 export let content: string;
-export let color: string = 'efb820';
-let shown_username = username;
+export let color: string;
 
 let is_me = false;
-if (username === $user) shown_username = 'You', is_me = true;
+$: if (id === $you.id && (username || !username)) username = 'You', is_me = true;
 
 let previous_is_me = false;
-if ($chat[1]?.type === 'message' && $chat[1]?.data.author.username === username) previous_is_me = true;
+if ($chat[idx+1]?.type === 'message' && $chat[idx+1]?.data.author?.id === id) previous_is_me = true;
+
+$: if (!username) username = $online_users[id]?.username ?? $authors[id]?.username ?? 'NOT_FOUND';
+$: if (!color) color = $online_users[id]?.color ?? $authors[id]?.color ?? 'efb820';
 </script>
 
 <div
@@ -34,7 +39,7 @@ if ($chat[1]?.type === 'message' && $chat[1]?.data.author.username === username)
             class="text-sm font-semibold"
             class:text-right={is_me}
             class:text-left={!is_me}
-        >{shown_username}</p>
+        >{username}</p>
         {/if}
         <p
             class="text-white text-lg font-medium"

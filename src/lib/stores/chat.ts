@@ -19,22 +19,25 @@ export interface SystemData {
     content: string;
     color: string;
     id: string;
+    author?: User;
 }
 export interface SystemEvent {
     type: 'system';
     data: SystemData;
 }
 
-export let chat = writable<Array<MessageEvent|SystemEvent>>([]);
-
+export let chat = writable<(MessageEvent|SystemEvent)[]>([]);
 export const addEvent = (event: SystemEvent | MessageEvent) => chat.update((c) => [event, ...c]);
+
 
 interface PendingMessage {
     message: string;
-    idx: number;
+    id: number;
     req_id: string;
 }
+
 export let pending_messages = writable<PendingMessage[]>([]);
+
 let pending_messages_value: PendingMessage[] = [];
 pending_messages.subscribe((value) => pending_messages_value = value);
 
@@ -44,7 +47,7 @@ export const addPendingMessage = (message: string, req_id: string) => {
     const pending_message = {
         message: message,
         req_id: req_id,
-        idx: pending_id_counter,
+        id: pending_id_counter,
     };
     pending_messages.update((m) => [pending_message, ...m]);
 };
