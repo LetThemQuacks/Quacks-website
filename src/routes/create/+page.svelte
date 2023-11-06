@@ -1,6 +1,7 @@
 <script lang="ts">
 import { connection_state, connection_ip, status_bar } from "$lib/stores/connection";
 import { configs } from "$lib/stores/server_configs";
+import { lake_password } from "$lib/stores/lake_password";
 import { page } from "$app/stores";
 import { goto } from "$app/navigation";
 import { onMount } from "svelte";
@@ -18,7 +19,6 @@ let ephemeral_lake = false;
 let max_ducks = 25;
 
 let need_password: boolean = false;
-let password = '';
 
 let options_visible = false;
 let custom_server = false;
@@ -35,7 +35,7 @@ const createLake = () => {
         max_joins: max_ducks,
         ephemeral: ephemeral_lake,
     };
-    if (need_password && password) data.password = password;
+    if (need_password && $lake_password) data.password = $lake_password;
 
     WS_Client.instance.sendPacket(
         {
@@ -102,11 +102,11 @@ onMount(() => {
             placeholder="Insert password"
             icon="mdi:lock"
 
-            bind:value={password}
+            bind:value={$lake_password}
         />
         {/if}
        
-       <button type="submit" class="btn w-full mt-4" disabled={$connection_state !== 'Connected'}>Create</button> 
+       <button type="submit" class="btn w-full mt-4 disabled:cursor-progress" disabled={$connection_state !== 'Connected'}>Create</button> 
     </form>
 
 

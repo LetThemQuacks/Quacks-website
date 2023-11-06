@@ -62,7 +62,7 @@ const sendMessage = (message: string) => {
                 bind:value={new_message}
             />
         </div>
-        <button type="submit" class="btn aspect-square h-12" disabled={!$you}>
+        <button type="submit" class="btn aspect-square h-12 disabled:cursor-progress" disabled={!$you}>
             <iconify-icon icon="iconamoon:send-fill" class="text-2xl" />
         </button>
     </form>

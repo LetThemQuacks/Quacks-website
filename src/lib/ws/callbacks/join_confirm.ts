@@ -2,6 +2,7 @@ import type { User, MessageEvent, SystemEvent } from "$lib/stores/chat";
 import { addUser, authors, online_users } from "$lib/stores/users";
 import { chat } from "$lib/stores/chat";
 import { you } from "$lib/stores/you";
+import { lake_password } from "$lib/stores/lake_password";
 
 interface JoinConfirmData {
     you: User;
@@ -11,6 +12,8 @@ interface JoinConfirmData {
 }
 
 const join_confirm = (data: JoinConfirmData) => {
+    lake_password.set('');
+
     online_users.set(data.online);
     authors.set(data.authors);
     you.set(data.you)

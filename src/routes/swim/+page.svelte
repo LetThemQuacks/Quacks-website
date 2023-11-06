@@ -1,6 +1,7 @@
 <script lang="ts">
 import { page } from "$app/stores";
 import { connection_state, connection_ip, status_bar } from "$lib/stores/connection";
+import { lake_password } from "$lib/stores/lake_password";
 import { configs } from "$lib/stores/server_configs";
 import { onMount } from "svelte";
 import { goto } from "$app/navigation";
@@ -21,7 +22,7 @@ $: $connection_state, $connection_ip, status_bar.set(`${$connection_state} to ${
 let options_visible = false;
 let custom_server = false;
 
-let id: string;
+let id: string = '';
 let new_ws_ip: string;
 
 const gotoLake = (id: string) => goto(`/lake/${id.toUpperCase()}${WS_Client.instance.ip !== WS_Client.default_ip ? `?ip=${WS_Client.instance.ip}` : ''}`);
@@ -51,7 +52,6 @@ onMount(() => {
     id = id_param;
     new_ws_ip = ip_param;
 })
-
 </script>
 
 <svelte:head>
@@ -76,7 +76,7 @@ onMount(() => {
         type="button"
         on:click={() => goto(`/create/${ip_param ? `?ip=${ip_param}` : ''}`)} 
         disabled={!$configs.room_creation?.allow || $connection_state !== 'Connected'}
-        class="btn w-full mt-6 mb-6"
+        class="btn w-full mt-6 mb-6 disabled:cursor-progress"
     >
         Create
     </button>
@@ -84,15 +84,24 @@ onMount(() => {
     <form on:submit|preventDefault={() => gotoLake(id)}>
         <QInput
             label="Lake ID"
+            bind:value={id}
             placeholder="XXXXXX"
             icon="mingcute:hashtag-fill"
             regex="^[a-zA-Z0-9]&#123;6&#125;$"
             title="Lake ID of 6 characters"
-
-            bind:value={id}
         />
 
-        <button class="btn w-full mt-4" disabled={$connection_state !== 'Connected'}>Swim</button> 
+        {#if id[5] === '1' || $page.url.searchParams.get('warn') === 'PASSWORD_NEEDED'}
+        <QInput
+            label="Password"
+            bind:value={$lake_password}
+            type="password"
+            placeholder="insert password"
+            icon="mdi:lock"
+        />
+        {/if}
+
+        <button class="btn w-full mt-4 disabled:cursor-progress" disabled={$connection_state !== 'Connected'}>Swim</button> 
     </form>
 
     <div class="mt-2">

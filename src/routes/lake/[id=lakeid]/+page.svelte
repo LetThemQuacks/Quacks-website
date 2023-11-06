@@ -7,6 +7,7 @@ import WS_Client from "$lib/ws/websocket";
 import { connection_state } from "$lib/stores/connection";
 import { resetChat } from "$lib/stores/chat";
 import { resetUsers } from "$lib/stores/users";
+import { lake_password } from "$lib/stores/lake_password";
 
 import QChat from "$lib/QChat.svelte";
 
@@ -20,10 +21,8 @@ $: ip = $page.url.searchParams.get("ip") ?? "";
 $: if ($connection_state?.includes("Failed to connect")) goto(`/swim${WS_Client.instance.ip !== WS_Client.default_ip ? `?ip=${WS_Client.instance.ip}` : ''}`);
 
 const join_room_error = (error: ErrorPacket) => {
-    if (error.code === "NOT_FOUND") return goto("/swim?err=NOT_FOUND");
-    if (error.code === "PASSWORD_NEEDED") {
-        return goto(`/swim?id=${lake_id}&err=PASSWORD_NEEDED`);
-    }
+    if (error.code === 'NOT_FOUND') return goto('/swim?err=NOT_FOUND');
+    if (error.code === 'PASSWORD_NEEDED' || error.code === 'INCORRECT_PASSWORD') return goto(`/swim?id=${lake_id.slice(0, 5)}1&warn=PASSWORD_NEEDED`);
 };
 
 onMount(async () => {
@@ -34,6 +33,7 @@ onMount(async () => {
           type: "join_room",
           data: {
             id: lake_id.toUpperCase().slice(0, 5),
+            password: $lake_password,
           },
         },
         join_room_error
