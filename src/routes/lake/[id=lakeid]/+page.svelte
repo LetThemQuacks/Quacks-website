@@ -21,8 +21,9 @@ $: ip = $page.url.searchParams.get("ip") ?? "";
 $: if ($connection_state?.includes("Failed to connect")) goto(`/swim${WS_Client.instance.ip !== WS_Client.default_ip ? `?ip=${WS_Client.instance.ip}` : ''}`);
 
 const join_room_error = (error: ErrorPacket) => {
-    if (error.code === 'NOT_FOUND') return goto('/swim?err=NOT_FOUND');
-    if (error.code === 'PASSWORD_NEEDED' || error.code === 'INCORRECT_PASSWORD') return goto(`/swim?id=${lake_id.slice(0, 5)}1&warn=PASSWORD_NEEDED`);
+    if (error.code === 'NOT_FOUND') return goto(`/swim?err=NOT_FOUND${WS_Client.instance.ip !== WS_Client.default_ip ? `&ip=${WS_Client.instance.ip}` : ''}`);
+    if (error.code === 'PASSWORD_NEEDED') return goto(`/lake/guardian?id=${lake_id.slice(0, 5)}1${WS_Client.instance.ip !== WS_Client.default_ip ? `&ip=${WS_Client.instance.ip}` : ''}`);
+    if (error.code === 'INCORRECT_PASSWORD') return goto(`/lake/guardian?id=${lake_id.slice(0, 5)}1&err=INCORRECT_SECRET_WORD${WS_Client.instance.ip !== WS_Client.default_ip ? `&ip=${WS_Client.instance.ip}` : ''}`);
 };
 
 onMount(async () => {

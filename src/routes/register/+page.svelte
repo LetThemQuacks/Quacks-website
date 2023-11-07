@@ -50,7 +50,7 @@
             label="Password"
             bind:value={password}
             type="password"
-            placeholder="insert password"
+            placeholder="Insert password"
             icon="mdi:lock"
         />
 

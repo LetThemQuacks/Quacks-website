@@ -3,8 +3,10 @@ interface ErrorDict {
 }
 
 const errors: ErrorDict = {
-    'NOT_FOUND': 'Oh no! Seems like you are trying to swim into an inexistent lake.',
+    'NOT_FOUND': 'Seems like you are trying to swim into an inexistent lake.',
     'ROOM_CREATION_NOT_ALLOWED': 'The ducks\' guardian prevents you from creating new lakes.',
+    'GUARDIAN_ERROR': 'An error occurred while you were talking to the lake guardian',
+    'INCORRECT_SECRET_WORD': 'The secret word is incorrect',
 }
 const warnings: ErrorDict = {
     'UNEXPECTED': 'Unexpected error occured',

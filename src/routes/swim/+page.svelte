@@ -1,7 +1,6 @@
 <script lang="ts">
 import { page } from "$app/stores";
 import { connection_state, connection_ip, status_bar } from "$lib/stores/connection";
-import { lake_password } from "$lib/stores/lake_password";
 import { configs } from "$lib/stores/server_configs";
 import { onMount } from "svelte";
 import { goto } from "$app/navigation";
@@ -11,7 +10,7 @@ import WS_Client from "$lib/ws/websocket";
 import QInput from "$lib/QInput.svelte";
 import QAlert from "$lib/QAlert.svelte";
 import QCheckbox from "$lib/QCheckbox.svelte";
-import { getError, getWarn } from "./errors";
+import { getError, getWarn } from "$lib/errors";
 
 $: warning = getWarn($page.url.searchParams.get('warn') ?? '');
 $: error = getError($page.url.searchParams.get('err') ?? '');
@@ -60,11 +59,11 @@ onMount(() => {
 
 <div class="w-80">
     {#if warning}
-            <QAlert color="orange" icon="ph:warning-fill">{ warning }</QAlert>
+        <QAlert color="orange" icon="ph:warning-fill">{ warning }</QAlert>
     {/if}
 
     {#if error}
-            <QAlert color="red" icon="ph:warning-circle-fill">{ error }</QAlert>
+        <QAlert color="red" icon="ph:warning-circle-fill">{ error }</QAlert>
     {/if}
 
 
@@ -90,16 +89,6 @@ onMount(() => {
             regex="^[a-zA-Z0-9]&#123;6&#125;$"
             title="Lake ID of 6 characters"
         />
-
-        {#if id[5] === '1' || $page.url.searchParams.get('warn') === 'PASSWORD_NEEDED'}
-        <QInput
-            label="Password"
-            bind:value={$lake_password}
-            type="password"
-            placeholder="insert password"
-            icon="mdi:lock"
-        />
-        {/if}
 
         <button class="btn w-full mt-4 disabled:cursor-progress" disabled={$connection_state !== 'Connected'}>Swim</button> 
     </form>

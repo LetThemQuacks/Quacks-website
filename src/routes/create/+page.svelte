@@ -97,9 +97,9 @@ onMount(() => {
         <QCheckbox text="hire a guardian" bind:value={need_password} />
         {#if need_password}
         <QInput
-            label="Lake Password"
+            label="Secret Word"
             type="password"
-            placeholder="Insert password"
+            placeholder="Insert secret word"
             icon="mdi:lock"
 
             bind:value={$lake_password}
