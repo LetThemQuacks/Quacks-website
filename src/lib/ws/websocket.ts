@@ -16,6 +16,7 @@ import message_confirm from "./callbacks/message_confirm";
 import user_join from "./callbacks/user_join";
 import user_left from "./callbacks/user_leave";
 import create_confirm from "./callbacks/create_confirm";
+import load_chat from "./callbacks/load_chat";
 
 type Error_Handlers = {
     [from_packet_type: string]: CallableFunction,
@@ -89,6 +90,7 @@ class WS_Client {
         CallbacksManager.registerCallback('user_join', user_join);
         CallbacksManager.registerCallback('user_left', user_left);
         CallbacksManager.registerCallback('create_confirm', create_confirm);
+        CallbacksManager.registerCallback('load_chat', load_chat);
     }
 
 

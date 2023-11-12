@@ -9,6 +9,7 @@ import QInput from "./QInput.svelte";
 import { utf8ToBase64, base64ToUtf8 } from "./ws/crypto/arraybuffers";
 
 let new_message: string;
+let chat_element: HTMLDivElement;
 
 let counter = 0;
 const generateReqId = (data: string) => {
@@ -28,11 +29,27 @@ const sendMessage = (message: string) => {
     addPendingMessage(message, req_id);
     new_message = '';
 };
+
+const loadMoreMessages = () => {
+    WS_Client.instance.sendPacket({
+        type: "load_messages",
+        data: {
+            start: $chat.length,
+            end: $chat.length + 50,
+        },
+    });
+}
+
+$: if(chat_element) {
+    chat_element.onscroll = () => {
+        if (chat_element.scrollTop * -1 === chat_element.scrollHeight - chat_element.clientHeight) loadMoreMessages();
+    }
+}
 </script>
 
 
 <div class="flex flex-col items-end justify-end w-80 h-[70vh] sm:mt-24">
-    <div class="flex flex-col-reverse items-start w-80 max-h-full pr-3 pt-1 overflow-y-auto">
+    <div class="flex flex-col-reverse items-start w-80 max-h-full pr-3 overflow-y-auto" bind:this={chat_element}>
         {#each $pending_messages as data (data.id)}
             <QPendingMessage content={data.message} />
         {/each}
