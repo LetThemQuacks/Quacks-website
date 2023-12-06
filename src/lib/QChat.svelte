@@ -48,7 +48,7 @@ $: if(chat_element) {
 </script>
 
 
-<div class="flex flex-col items-end justify-end w-80 h-[70vh] sm:mt-24">
+<div class="flex flex-col items-end justify-end w-80 sm:mt-24 h-[70vh]">
     <div class="flex flex-col-reverse items-start w-80 max-h-full pr-3 overflow-y-auto" bind:this={chat_element}>
         {#each $pending_messages as data (data.id)}
             <QPendingMessage content={data.message} />

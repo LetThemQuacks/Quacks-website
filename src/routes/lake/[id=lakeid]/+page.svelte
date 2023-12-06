@@ -10,6 +10,8 @@ import { resetUsers } from "$lib/stores/users";
 import { lake_password } from "$lib/stores/lake_password";
 
 import QChat from "$lib/QChat.svelte";
+import QGame from "$lib/QGame.svelte";
+
 
 interface ErrorPacket {
     from_packet_type: string;
@@ -26,7 +28,7 @@ const join_room_error = (error: ErrorPacket) => {
     if (error.code === 'INCORRECT_PASSWORD') return goto(`/lake/guardian?id=${lake_id.slice(0, 5)}1&err=INCORRECT_SECRET_WORD${WS_Client.instance.ip !== WS_Client.default_ip ? `&ip=${WS_Client.instance.ip}` : ''}`);
 };
 
-onMount(async () => {
+onMount(() => {
     if (!WS_Client.instance) new WS_Client(ip);
     if (WS_Client.instance.ws.readyState === WebSocket.CLOSED) new WS_Client(ip, true);
     WS_Client.instance.sendPacket(
@@ -40,7 +42,7 @@ onMount(async () => {
         join_room_error
     );
     resetChat();
-
+    resetUsers();
 });
 
 onDestroy(() => {
@@ -54,8 +56,8 @@ onDestroy(() => {
   <title>Lake #{lake_id} - Quacks</title>
 </svelte:head>
 
-<div class="w-full flex flex-row justify-between p-12 pr-24">
-    <div></div>
+<div class="w-full flex flex-row justify-between items-center p-12 pr-24 ">
+    <QGame />
     <QChat />
 </div>
 

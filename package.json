@@ -28,6 +28,7 @@
 	"dependencies": {
 		"iconify-icon": "^1.0.8",
 		"jsonwebtoken": "^9.0.1",
+		"pixi.js": "^7.3.2",
 		"tree-sitter": "^0.20.5"
 	}
 }
