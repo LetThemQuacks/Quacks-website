@@ -1,5 +1,11 @@
-import type { User } from "./chat";
 import { writable } from "svelte/store";
+
+export interface User {
+    id: string;
+    username?: string;
+    color?: string;
+
+}
 
 export const online_users = writable<{[user_id: string]: User}>({});
 export const authors = writable<{[user_id: string]: User}>({});

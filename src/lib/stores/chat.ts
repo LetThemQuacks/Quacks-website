@@ -1,11 +1,7 @@
 import { utf8ToBase64 } from "$lib/ws/crypto/arraybuffers";
+import type { User } from "./users";
 import { writable } from "svelte/store";
 
-export interface User {
-    id: string;
-    username?: string;
-    color?: string;
-}
 export interface MessageData {
     content: string;
     id: string;
